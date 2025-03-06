@@ -35,8 +35,12 @@ public class CommentService {
         Map<Comment, List<Reply>> map = replyRepository.findByCommentIdIn(commentIds).stream()
                 .collect(Collectors.groupingBy(Reply::getComment));
 
-        return map.keySet().stream()
-                .map(comment -> CommentResponse.from(comment, map.get(comment)))
+        return comments.stream()
+                .map(comment
+                        -> CommentResponse.from(
+                                comment,
+                                map.getOrDefault(comment, List.of())
+                        ))
                 .toList();
     }
 
