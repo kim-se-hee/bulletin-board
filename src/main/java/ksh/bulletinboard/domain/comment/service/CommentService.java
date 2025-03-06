@@ -19,8 +19,10 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
 
-    public List<Comment> getCommentsOfPost(long id){
-        return commentRepository.findByPostId(id);
+    public List<CommentResponse> getCommentsOfPost(long id){
+        return commentRepository.findByPostId(id).stream()
+                .map(CommentResponse::from)
+                .toList();
     }
 
     public List<CommentResponse> getCommentsWithRepliesOfPost(long id){
