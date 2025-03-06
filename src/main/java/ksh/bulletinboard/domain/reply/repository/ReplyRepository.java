@@ -9,4 +9,6 @@ public interface ReplyRepository extends JpaRepository<Reply, Integer> {
 
     List<Reply> findByCommentId(long id);
 
+    List<Reply> findByCommentIdIn(List<Long> ids);
+
 }
