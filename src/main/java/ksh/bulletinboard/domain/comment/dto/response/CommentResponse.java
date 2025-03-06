@@ -17,6 +17,14 @@ public class CommentResponse {
     String content;
     List<ReplyResponse> replies;
 
+    public static CommentResponse from(Comment comment) {
+        return new  CommentResponse(comment);
+    }
+
+    public static CommentResponse from(Comment comment, List<Reply> replies) {
+        return new  CommentResponse(comment, replies);
+    }
+
     private CommentResponse(Comment comment) {
         this.id = comment.getId();
         this.content = comment.getContent();
@@ -29,14 +37,6 @@ public class CommentResponse {
         this.replies = replies.stream()
                 .map(ReplyResponse::from)
                 .toList();
-    }
-
-    public static CommentResponse from(Comment comment) {
-        return new  CommentResponse(comment);
-    }
-
-    public static CommentResponse from(Comment comment, List<Reply> replies) {
-        return new  CommentResponse(comment, replies);
     }
 
 }

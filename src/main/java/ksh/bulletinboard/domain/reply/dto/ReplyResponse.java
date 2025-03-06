@@ -11,13 +11,13 @@ public class ReplyResponse {
     private long id;
     private String content;
 
+    public static ReplyResponse from(Reply reply) {
+        return new ReplyResponse(reply);
+    }
+
     private ReplyResponse(Reply reply) {
         this.id = reply.getId();
         this.content = reply.getContent();
-    }
-
-    public static ReplyResponse from(Reply reply) {
-        return new ReplyResponse(reply);
     }
 
 }
