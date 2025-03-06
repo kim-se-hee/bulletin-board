@@ -1,4 +1,4 @@
-package ksh.bulletin.board;
+package ksh.bulletinboard;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
