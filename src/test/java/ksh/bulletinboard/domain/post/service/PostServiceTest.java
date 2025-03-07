@@ -34,28 +34,12 @@ class PostServiceTest {
     @Test
     void getPostsOfBoard1(){
         //given
-        Board board = Board.builder()
-                .title("자유게시판")
-                .build();
+        Board board = createBoard();
         boardRepository.save(board);
 
-        Post post1 = Post.builder()
-                .title("글1")
-                .views(1L)
-                .board(board)
-                .build();
-
-        Post post2 = Post.builder()
-                .title("글2")
-                .views(1L)
-                .board(board)
-                .build();
-
-        Post post3 = Post.builder()
-                .title("글3")
-                .views(1L)
-                .board(board)
-                .build();
+        Post post1 = createPost("글1", board);
+        Post post2 = createPost("글2", board);
+        Post post3 = createPost("글3", board);
         postRepository.saveAll(List.of(post1, post2, post3));
 
         PageRequest pageRequest = PageRequest.of(1, 2);
@@ -78,28 +62,12 @@ class PostServiceTest {
     @Test
     void getPostsOfBoard2(){
         //given
-        Board board = Board.builder()
-                .title("자유게시판")
-                .build();
+        Board board = createBoard();
         boardRepository.save(board);
 
-        Post post1 = Post.builder()
-                .title("글1")
-                .views(1L)
-                .board(board)
-                .build();
-
-        Post post2 = Post.builder()
-                .title("글2")
-                .views(1L)
-                .board(board)
-                .build();
-
-        Post post3 = Post.builder()
-                .title("글3")
-                .views(1L)
-                .board(board)
-                .build();
+        Post post1 = createPost("글1", board);
+        Post post2 = createPost("글2", board);
+        Post post3 = createPost("글3", board);
         postRepository.saveAll(List.of(post1, post2, post3));
 
         PageRequest pageRequest = PageRequest.of(3, 2);
@@ -116,28 +84,12 @@ class PostServiceTest {
     @Test
     void getPostsOfBoardAndTitle1() {
         //given
-        Board board = Board.builder()
-                .title("자유게시판")
-                .build();
+        Board board = createBoard();
         boardRepository.save(board);
 
-        Post post1 = Post.builder()
-                .title("글123")
-                .views(1L)
-                .board(board)
-                .build();
-
-        Post post2 = Post.builder()
-                .title("글456")
-                .views(1L)
-                .board(board)
-                .build();
-
-        Post post3 = Post.builder()
-                .title("글789")
-                .views(1L)
-                .board(board)
-                .build();
+        Post post1 = createPost("글123", board);
+        Post post2 = createPost("글456", board);
+        Post post3 = createPost("글789", board);
         postRepository.saveAll(List.of(post1, post2, post3));
 
         PageRequest pageRequest = PageRequest.of(0, 2);
@@ -155,5 +107,19 @@ class PostServiceTest {
                 .containsExactly(tuple("글456", 1L));
 
     }
+    
+    private static Board createBoard() {
+        return Board.builder()
+                .title("자유게시판")
+                .build();
+    }
 
+    private static Post createPost(String title, Board board) {
+        return Post.builder()
+                .title(title)
+                .views(1L)
+                .board(board)
+                .build();
+    }
+    
 }
