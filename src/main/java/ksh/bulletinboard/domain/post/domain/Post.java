@@ -41,4 +41,8 @@ public class Post extends BaseEntity {
         this.member = member;
     }
 
+    public void increaseViews() {
+        this.views++;
+    }
+
 }
