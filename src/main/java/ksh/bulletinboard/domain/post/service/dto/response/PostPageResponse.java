@@ -15,7 +15,7 @@ public class PostPageResponse {
     private int pageSize;
     private int totalPages;
     private boolean hasNext;
-    private List<PostResponse> postResponses;
+    private List<PostPreviewResponse> postResponses;
 
     public static PostPageResponse from(Page<Post> page) {
         return new PostPageResponse(page);
@@ -27,7 +27,7 @@ public class PostPageResponse {
         this.totalPages = page.getTotalPages();
         this.hasNext = page.hasNext();
         this.postResponses = page.getContent().stream()
-                .map(PostResponse::from)
+                .map(PostPreviewResponse::from)
                 .toList();
     }
 

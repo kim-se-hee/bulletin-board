@@ -4,24 +4,26 @@ import ksh.bulletinboard.domain.post.domain.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
-public class PostResponse {
+public class PostPreviewResponse {
 
     private long id;
     private String title;
-    private String content;
     private long views;
+    private LocalDateTime createdAt;
 
-    public static PostResponse from(Post post) {
-        return new PostResponse(post);
+    public static PostPreviewResponse from(Post post) {
+        return new PostPreviewResponse(post);
     }
 
-    private PostResponse(Post post) {
+    private PostPreviewResponse(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
-        this.content = post.getContent();
         this.views = post.getViews();
+        this.createdAt = post.getCreatedAt();
     }
 
 }
