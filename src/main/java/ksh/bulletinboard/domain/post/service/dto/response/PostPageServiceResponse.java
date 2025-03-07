@@ -9,25 +9,25 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class PostPageResponse {
+public class PostPageServiceResponse {
 
     private int pageNum;
     private int pageSize;
     private int totalPages;
     private boolean hasNext;
-    private List<PostPreviewResponse> postResponses;
+    private List<PostPreviewServiceResponse> postResponses;
 
-    public static PostPageResponse from(Page<Post> page) {
-        return new PostPageResponse(page);
+    public static PostPageServiceResponse from(Page<Post> page) {
+        return new PostPageServiceResponse(page);
     }
 
-    private  PostPageResponse(Page<Post> page) {
+    private PostPageServiceResponse(Page<Post> page) {
         this.pageNum = page.getNumber();
         this.pageSize = page.getSize();
         this.totalPages = page.getTotalPages();
         this.hasNext = page.hasNext();
         this.postResponses = page.getContent().stream()
-                .map(PostPreviewResponse::from)
+                .map(PostPreviewServiceResponse::from)
                 .toList();
     }
 

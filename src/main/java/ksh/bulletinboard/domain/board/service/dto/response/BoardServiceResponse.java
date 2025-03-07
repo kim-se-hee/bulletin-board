@@ -6,16 +6,16 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class BoardResponse {
+public class BoardServiceResponse {
 
     private long id;
     private String title;
 
-    public static BoardResponse from(Board board) {
-        return new  BoardResponse(board);
+    public static BoardServiceResponse from(Board board) {
+        return new BoardServiceResponse(board);
     }
 
-    private BoardResponse(Board board) {
+    private BoardServiceResponse(Board board) {
         this.id = board.getId();
         this.title = board.getTitle();
     }

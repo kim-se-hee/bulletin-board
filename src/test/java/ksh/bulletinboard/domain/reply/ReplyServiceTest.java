@@ -3,7 +3,7 @@ package ksh.bulletinboard.domain.reply;
 import ksh.bulletinboard.domain.comment.domain.Comment;
 import ksh.bulletinboard.domain.comment.repository.CommentRepository;
 import ksh.bulletinboard.domain.reply.domain.Reply;
-import ksh.bulletinboard.domain.reply.service.dto.ReplyResponse;
+import ksh.bulletinboard.domain.reply.service.dto.ReplyServiceResponse;
 import ksh.bulletinboard.domain.reply.repository.ReplyRepository;
 import ksh.bulletinboard.domain.reply.service.ReplyService;
 import org.junit.jupiter.api.DisplayName;
@@ -51,7 +51,7 @@ class ReplyServiceTest {
         replyRepository.saveAll(List.of(reply1,reply2));
 
         //when
-        List<ReplyResponse> repliesOfComment = replyService.getRepliesOfComment(comment.getId());
+        List<ReplyServiceResponse> repliesOfComment = replyService.getRepliesOfComment(comment.getId());
 
         //then
         assertThat(repliesOfComment).hasSize(2)

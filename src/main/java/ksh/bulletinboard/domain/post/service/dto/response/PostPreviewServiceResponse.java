@@ -8,23 +8,21 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class PostResponse {
+public class PostPreviewServiceResponse {
 
     private long id;
     private String title;
     private long views;
-    private String content;
     private LocalDateTime createdAt;
 
-    public static PostResponse from(Post post) {
-        return new PostResponse(post);
+    public static PostPreviewServiceResponse from(Post post) {
+        return new PostPreviewServiceResponse(post);
     }
 
-    private PostResponse(Post post) {
+    private PostPreviewServiceResponse(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.views = post.getViews();
-        this.content = post.getContent();
         this.createdAt = post.getCreatedAt();
     }
 

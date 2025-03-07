@@ -6,8 +6,8 @@ import ksh.bulletinboard.domain.member.domain.Member;
 import ksh.bulletinboard.domain.member.repository.MemberRepository;
 import ksh.bulletinboard.domain.post.domain.Post;
 import ksh.bulletinboard.domain.post.repository.PostRepository;
-import ksh.bulletinboard.domain.post.service.dto.response.PostPageResponse;
-import ksh.bulletinboard.domain.post.service.dto.response.PostResponse;
+import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
+import ksh.bulletinboard.domain.post.service.dto.response.PostServiceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ class PostServiceTest {
         PageRequest pageRequest = PageRequest.of(1, 2);
 
         //when
-        PostPageResponse response = postService.getPostsOfBoard(board.getId(), pageRequest);
+        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), pageRequest);
 
         //then
         assertThat(response)
@@ -78,7 +78,7 @@ class PostServiceTest {
         PageRequest pageRequest = PageRequest.of(3, 2);
 
         //when
-        PostPageResponse response = postService.getPostsOfBoard(board.getId(), pageRequest);
+        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), pageRequest);
 
         //then
         assertThat(response.getPostResponses()).isEmpty();
@@ -100,7 +100,7 @@ class PostServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 2);
 
         //when
-        PostPageResponse response = postService.getPostsOfBoardByTitle(board.getId(), "5", pageRequest);
+        PostPageServiceResponse response = postService.getPostsOfBoardByTitle(board.getId(), "5", pageRequest);
 
         //then
         assertThat(response)
@@ -132,7 +132,7 @@ class PostServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 2);
 
         //when
-        PostPageResponse response = postService.getPostsOfBoardByNickname(board.getId(), "회원1", pageRequest);
+        PostPageServiceResponse response = postService.getPostsOfBoardByNickname(board.getId(), "회원1", pageRequest);
 
         //then
         assertThat(response)
@@ -159,7 +159,7 @@ class PostServiceTest {
         postRepository.save(post);
 
         //when
-        PostResponse response = postService.getSinglePost(post.getId());
+        PostServiceResponse response = postService.getSinglePost(post.getId());
 
         //then
         assertThat(response)

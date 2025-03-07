@@ -1,6 +1,6 @@
 package ksh.bulletinboard.domain.reply.service;
 
-import ksh.bulletinboard.domain.reply.service.dto.ReplyResponse;
+import ksh.bulletinboard.domain.reply.service.dto.ReplyServiceResponse;
 import ksh.bulletinboard.domain.reply.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,9 @@ public class ReplyService {
 
     private final ReplyRepository replyRepository;
 
-    public List<ReplyResponse> getRepliesOfComment(long id){
+    public List<ReplyServiceResponse> getRepliesOfComment(long id){
         return replyRepository.findByCommentId(id).stream()
-                .map(ReplyResponse::from)
+                .map(ReplyServiceResponse::from)
                 .toList();
     }
 

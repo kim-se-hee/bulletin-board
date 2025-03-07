@@ -6,16 +6,16 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ReplyResponse {
+public class ReplyServiceResponse {
 
     private long id;
     private String content;
 
-    public static ReplyResponse from(Reply reply) {
-        return new ReplyResponse(reply);
+    public static ReplyServiceResponse from(Reply reply) {
+        return new ReplyServiceResponse(reply);
     }
 
-    private ReplyResponse(Reply reply) {
+    private ReplyServiceResponse(Reply reply) {
         this.id = reply.getId();
         this.content = reply.getContent();
     }

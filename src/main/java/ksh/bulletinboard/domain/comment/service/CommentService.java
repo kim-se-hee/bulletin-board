@@ -1,7 +1,7 @@
 package ksh.bulletinboard.domain.comment.service;
 
 import ksh.bulletinboard.domain.comment.domain.Comment;
-import ksh.bulletinboard.domain.comment.dto.response.CommentResponse;
+import ksh.bulletinboard.domain.comment.dto.response.CommentSerivceResponse;
 import ksh.bulletinboard.domain.comment.repository.CommentRepository;
 import ksh.bulletinboard.domain.reply.domain.Reply;
 import ksh.bulletinboard.domain.reply.repository.ReplyRepository;
@@ -19,13 +19,13 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
 
-    public List<CommentResponse> getCommentsOfPost(long id){
+    public List<CommentSerivceResponse> getCommentsOfPost(long id){
         return commentRepository.findByPostId(id).stream()
-                .map(CommentResponse::from)
+                .map(CommentSerivceResponse::from)
                 .toList();
     }
 
-    public List<CommentResponse> getCommentsWithRepliesOfPost(long id){
+    public List<CommentSerivceResponse> getCommentsWithRepliesOfPost(long id){
         List<Comment> comments = commentRepository.findByPostId(id);
 
         List<Long> commentIds = comments.stream()
@@ -37,7 +37,7 @@ public class CommentService {
 
         return comments.stream()
                 .map(comment
-                        -> CommentResponse.from(
+                        -> CommentSerivceResponse.from(
                                 comment,
                                 map.getOrDefault(comment, List.of())
                         ))
