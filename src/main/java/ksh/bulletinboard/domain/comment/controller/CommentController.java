@@ -20,16 +20,16 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/board/{boardId}/comments")
+    @GetMapping("/post/{postId}/comments")
     public ResponseEntity<CommentResponse> comments(
-            @PathVariable("boardId") Long boardId,
+            @PathVariable("postId") Long postId,
             @RequestParam(value = "includeReply", required = false, defaultValue = "false") boolean includeReply
     ) {
         List<CommentSerivceResponse> comments;
         if(includeReply){
-            comments = commentService.getCommentsWithRepliesOfPost(boardId);
+            comments = commentService.getCommentsWithRepliesOfPost(postId);
         }else{
-            comments = commentService.getCommentsOfPost(boardId);
+            comments = commentService.getCommentsOfPost(postId);
         }
         CommentResponse response = CommentResponse.of(comments);
 

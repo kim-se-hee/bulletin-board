@@ -1,30 +1,22 @@
 package ksh.bulletinboard.domain.comment.controller;
 
-import ksh.bulletinboard.domain.comment.domain.Comment;
 import ksh.bulletinboard.domain.comment.dto.response.CommentSerivceResponse;
 import ksh.bulletinboard.domain.comment.service.CommentService;
-import ksh.bulletinboard.domain.reply.domain.Reply;
-import ksh.bulletinboard.domain.reply.service.dto.ReplyServiceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CommentController.class)
 class CommentControllerTest {
@@ -45,7 +37,7 @@ class CommentControllerTest {
 
         //when //then
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/board/1/comments")
+                MockMvcRequestBuilders.get("/post/1/comments")
         ).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.comments").isArray());
@@ -56,7 +48,7 @@ class CommentControllerTest {
     void commentsWithReplies() throws Exception {
         //when //then
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/board/1/comments")
+                        MockMvcRequestBuilders.get("/post/1/comments")
                                 .param("includeReply", "true")
                 ).andDo(print())
                 .andExpect(status().isOk());
