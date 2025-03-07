@@ -7,6 +7,7 @@ import ksh.bulletinboard.domain.member.repository.MemberRepository;
 import ksh.bulletinboard.domain.post.domain.Post;
 import ksh.bulletinboard.domain.post.repository.PostRepository;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageResponse;
+import ksh.bulletinboard.domain.post.service.dto.response.PostResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -148,6 +148,42 @@ class PostServiceTest {
 
     }
 
+    @DisplayName("요청한 게시글을 조회하면 게시글의 정보가 반환되며 조회수가 증가한다")
+    @Test
+    void getSinglePost1() {
+        //given
+        Board board = createBoard();
+        boardRepository.save(board);
+
+        Post post = createPost("글", board);
+        postRepository.save(post);
+
+        //when
+        PostResponse response = postService.getSinglePost(post.getId());
+
+        //then
+        assertThat(response)
+                .extracting("title", "content", "views")
+                .containsExactly("글", "본문", 2L);
+
+    }
+
+    @DisplayName("존재하지 않는 게시글을 요청하면 예외가 발생한다")
+    @Test
+    void getSinglePost2() {
+        //given
+        Board board = createBoard();
+        boardRepository.save(board);
+
+        Post post = createPost("글", board);
+        postRepository.save(post);
+
+        //when //then
+        assertThatThrownBy(() -> postService.getSinglePost(100))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("존재하지 않는 글입니다");
+    }
+
     private static Board createBoard() {
         return Board.builder()
                 .title("자유게시판")
@@ -163,6 +199,7 @@ class PostServiceTest {
     private static Post createPost(String title, Board board) {
         return Post.builder()
                 .title(title)
+                .content("본문")
                 .views(1L)
                 .board(board)
                 .build();
@@ -171,6 +208,7 @@ class PostServiceTest {
     private static Post createPost(String title, Board board, Member member) {
         return Post.builder()
                 .title(title)
+                .content("본문")
                 .views(1L)
                 .board(board)
                 .member(member)
