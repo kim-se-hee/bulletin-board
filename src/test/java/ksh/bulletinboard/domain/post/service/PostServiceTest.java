@@ -114,7 +114,7 @@ class PostServiceTest {
 
     @DisplayName("요청한 게시판의 게시글을 제목으로 검색 후 게시글의 목록을 페이지로 조회한다")
     @Test
-    void getPostsOfBoardAndTitle1(){
+    void getPostsOfBoardAndTitle1() {
         //given
         Board board = Board.builder()
                 .title("자유게시판")
@@ -122,75 +122,37 @@ class PostServiceTest {
         boardRepository.save(board);
 
         Post post1 = Post.builder()
-                .title("글1")
+                .title("글123")
                 .views(1L)
                 .board(board)
                 .build();
 
         Post post2 = Post.builder()
-                .title("글2")
+                .title("글456")
                 .views(1L)
                 .board(board)
                 .build();
 
         Post post3 = Post.builder()
-                .title("글3")
+                .title("글789")
                 .views(1L)
                 .board(board)
                 .build();
         postRepository.saveAll(List.of(post1, post2, post3));
 
-        PageRequest pageRequest = PageRequest.of(1, 2);
+        PageRequest pageRequest = PageRequest.of(0, 2);
 
         //when
-        PostPageResponse response = postService.getPostsOfBoard(board.getId(), pageRequest);
+        PostPageResponse response = postService.getPostsOfBoardByTitle(board.getId(), "5", pageRequest);
 
         //then
         assertThat(response)
-                .extracting("pageNum", "pageSize",  "totalPages", "hasNext")
-                .containsExactly(1, 2, 2, false);
+                .extracting("pageNum", "pageSize", "totalPages", "hasNext")
+                .containsExactly(0, 2, 1, false);
 
         assertThat(response.getPostResponses()).hasSize(1)
                 .extracting("title", "views")
-                .containsExactly(tuple("글3", 1L));
-
-    }
-
-    @DisplayName("마지막 페이지 번호보다 큰 페이지 번호가 주어지면 빈 리스트가 반환된다")
-    @Test
-    void getPostsOfBoardAndTitle2(){
-        //given
-        Board board = Board.builder()
-                .title("자유게시판")
-                .build();
-        boardRepository.save(board);
-
-        Post post1 = Post.builder()
-                .title("글1")
-                .views(1L)
-                .board(board)
-                .build();
-
-        Post post2 = Post.builder()
-                .title("글2")
-                .views(1L)
-                .board(board)
-                .build();
-
-        Post post3 = Post.builder()
-                .title("글3")
-                .views(1L)
-                .board(board)
-                .build();
-        postRepository.saveAll(List.of(post1, post2, post3));
-
-        PageRequest pageRequest = PageRequest.of(3, 2);
-
-        //when
-        PostPageResponse response = postService.getPostsOfBoard(board.getId(), pageRequest);
-
-        //then
-        assertThat(response.getPostResponses()).isEmpty();
+                .containsExactly(tuple("글456", 1L));
 
     }
 
