@@ -26,4 +26,9 @@ public class PostService {
         return PostPageResponse.from(page);
     }
 
+    public PostPageResponse getPostsOfBoardByNickname(long id, String nickname, Pageable pageRequest) {
+        Page<Post> page = postRepository.findByBoardIdAndMemberNickname(id, nickname, pageRequest);
+        return PostPageResponse.from(page);
+    }
+
 }
