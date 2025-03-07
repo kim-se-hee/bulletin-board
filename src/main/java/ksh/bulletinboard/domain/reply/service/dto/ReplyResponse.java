@@ -1,4 +1,4 @@
-package ksh.bulletinboard.domain.reply.dto;
+package ksh.bulletinboard.domain.reply.service.dto;
 
 import ksh.bulletinboard.domain.reply.domain.Reply;
 import lombok.Getter;

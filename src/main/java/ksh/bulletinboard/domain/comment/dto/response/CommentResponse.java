@@ -2,7 +2,7 @@ package ksh.bulletinboard.domain.comment.dto.response;
 
 import ksh.bulletinboard.domain.comment.domain.Comment;
 import ksh.bulletinboard.domain.reply.domain.Reply;
-import ksh.bulletinboard.domain.reply.dto.ReplyResponse;
+import ksh.bulletinboard.domain.reply.service.dto.ReplyResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
