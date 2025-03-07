@@ -21,4 +21,9 @@ public class PostService {
         return PostPageResponse.from(page);
     }
 
+    public PostPageResponse getPostsOfBoardByTitle(long id, String title, Pageable pageRequest) {
+        Page<Post> page = postRepository.findByBoardIdAndTitleContaining(id, title, pageRequest);
+        return PostPageResponse.from(page);
+    }
+
 }

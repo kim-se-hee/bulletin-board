@@ -9,4 +9,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findByBoardId(long id, Pageable pageRequest);
 
+    Page<Post> findByBoardIdAndTitleContaining(long id, String title, Pageable pageRequest);
+
 }
