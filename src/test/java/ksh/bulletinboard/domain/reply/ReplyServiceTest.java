@@ -5,7 +5,7 @@ import ksh.bulletinboard.domain.comment.repository.CommentRepository;
 import ksh.bulletinboard.domain.reply.domain.Reply;
 import ksh.bulletinboard.domain.reply.dto.ReplyResponse;
 import ksh.bulletinboard.domain.reply.repository.ReplyRepository;
-import org.assertj.core.api.Assertions;
+import ksh.bulletinboard.domain.reply.service.ReplyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
