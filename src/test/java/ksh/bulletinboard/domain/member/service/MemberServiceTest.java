@@ -58,4 +58,65 @@ class MemberServiceTest {
 
       }
 
+      @DisplayName("이미 가입한 회원은 아이디와 비밀번호로 조회한다")
+      @Test
+      void getByNicknameAndPassword(){
+          //given
+          String nickname = "이름";
+          String password = "123456";
+
+          Member member = Member.builder()
+                  .nickname(nickname)
+                  .password(password)
+                  .build();
+          memberRepository.save(member);
+
+          //when
+          Member joinnedMember = memberService.getByNicknameAndPassword(nickname, password);
+
+          //then
+          assertThat(joinnedMember).isEqualTo(member);
+
+       }
+
+    @DisplayName("아이디를 잘못 입력한 경우 가입한 회원을 조회 시 예외가 발생한다")
+    @Test
+    void getByNicknameAndPasswordWithException1(){
+        //given
+        String nickname = "이름";
+        String password = "123456";
+
+        Member member = Member.builder()
+                .nickname(nickname)
+                .password(password)
+                .build();
+        memberRepository.save(member);
+
+        //when //then
+        assertThatThrownBy(() -> memberService.getByNicknameAndPassword("잘못된 이름", password))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("회원 정보가 일치하지 않습니다");
+
+    }
+
+    @DisplayName("비밀번호를 잘못 입력한 경우 가입한 회원을 조회 시 예외가 발생한다")
+    @Test
+    void getByNicknameAndPasswordWithException2(){
+        //given
+        String nickname = "이름";
+        String password = "123456";
+
+        Member member = Member.builder()
+                .nickname(nickname)
+                .password(password)
+                .build();
+        memberRepository.save(member);
+
+        //when //then
+        assertThatThrownBy(() -> memberService.getByNicknameAndPassword(nickname, "48545"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("회원 정보가 일치하지 않습니다");
+
+    }
+
 }
