@@ -23,4 +23,9 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    public Member getByNicknameAndPassword(String nickname, String password) {
+        return memberRepository.findByNicknameAndPassword(nickname, password)
+                .orElseThrow(() -> new IllegalArgumentException("회원 정보가 일치하지 않습니다"));
+    }
+
 }
