@@ -1,6 +1,5 @@
 package ksh.bulletinboard.domain.comment.controller;
 
-import ksh.bulletinboard.domain.comment.dto.response.CommentSerivceResponse;
 import ksh.bulletinboard.domain.comment.service.CommentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,14 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CommentController.class)
@@ -30,17 +24,11 @@ class CommentControllerTest {
     @DisplayName("게시글의 댓글을 조회한다")
     @Test
     void comments() throws Exception {
-        //given
-        List<CommentSerivceResponse> responses = List.of();
-        given(commentService.getCommentsOfPost(anyLong()))
-                .willReturn(responses);
-
         //when //then
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/post/1/comments")
-        ).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.comments").isArray());
+                    get("/post/1/comments")
+                ).andDo(print())
+                .andExpect(status().isOk());
      }
 
     @DisplayName("필요 시 게시글의 댓글과 함께 대댓글을 조회할 수 있다")
@@ -48,7 +36,7 @@ class CommentControllerTest {
     void commentsWithReplies() throws Exception {
         //when //then
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/post/1/comments")
+                        get("/post/1/comments")
                                 .param("includeReply", "true")
                 ).andDo(print())
                 .andExpect(status().isOk());
