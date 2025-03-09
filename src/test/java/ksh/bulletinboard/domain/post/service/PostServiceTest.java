@@ -6,6 +6,7 @@ import ksh.bulletinboard.domain.member.domain.Member;
 import ksh.bulletinboard.domain.member.repository.MemberRepository;
 import ksh.bulletinboard.domain.post.domain.Post;
 import ksh.bulletinboard.domain.post.repository.PostRepository;
+import ksh.bulletinboard.domain.post.service.dto.request.PostEditServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.request.PostRegisterServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterResponse;
@@ -237,6 +238,45 @@ class PostServiceTest {
         assertThatThrownBy(() -> postService.writePost(request))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 게시판입니다");
+
+    }
+
+    @DisplayName("글의 제목 또는 내용을 수정한다")
+    @Test
+    void editPost1(){
+        //given
+        Member member = createMember("member1");
+        memberRepository.save(member);
+
+        Post post = Post.builder()
+                .title("title1")
+                .content("content1")
+                .member(member)
+                .build();
+        postRepository.save(post);
+
+        PostEditServiceRequest request = new PostEditServiceRequest(post.getId(), "title2", "content2");
+
+        //when
+        PostServiceResponse response = postService.editPost(request);
+
+        //then
+        assertThat(response.getId()).isEqualTo(post.getId());
+        assertThat(response.getTitle()).isEqualTo("title2");
+        assertThat(response.getContent()).isEqualTo("content2");
+
+    }
+
+    @DisplayName("존재하지 않는 글을 수정하려 하면 예외가 발생한다")
+    @Test
+    void editWithException(){
+        //given
+        PostEditServiceRequest request = new PostEditServiceRequest(1L, "title2", "content2");
+
+        //when //then
+        assertThatThrownBy(() -> postService.editPost(request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("존재하지 않는 게시글입니다");
 
     }
 
