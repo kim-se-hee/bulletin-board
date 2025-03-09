@@ -29,4 +29,7 @@ public class Reply extends BaseEntity {
         this.comment = comment;
     }
 
+    public void editContent(String content) {
+        this.content = content;
+    }
 }
