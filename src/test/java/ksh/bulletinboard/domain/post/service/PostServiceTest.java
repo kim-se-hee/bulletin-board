@@ -6,8 +6,11 @@ import ksh.bulletinboard.domain.member.domain.Member;
 import ksh.bulletinboard.domain.member.repository.MemberRepository;
 import ksh.bulletinboard.domain.post.domain.Post;
 import ksh.bulletinboard.domain.post.repository.PostRepository;
+import ksh.bulletinboard.domain.post.service.dto.request.PostRegisterServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
+import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostServiceResponse;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,6 +185,59 @@ class PostServiceTest {
         assertThatThrownBy(() -> postService.getSinglePost(100))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 글입니다");
+    }
+
+    @DisplayName("회원이 게시판에 글을 작성한다")
+    @Test
+    void writePost1(){
+        //given
+        Board board = createBoard();
+        boardRepository.save(board);
+
+        Member member = createMember("member1");
+        memberRepository.save(member);
+
+        PostRegisterServiceRequest request = PostRegisterServiceRequest.of("제목", "내용", member.getId(), board.getId());
+
+        //when
+        PostRegisterResponse response = postService.writePost(request);
+
+        //then
+        assertThat(response.getId()).isGreaterThan(0);
+        assertThat(response.getTitle()).isEqualTo("제목");
+
+     }
+
+    @DisplayName("가입하지 않은 회원이 글을 쓰려하면 예외가 발생한다")
+    @Test
+    void writePost2(){
+        //given
+        Board board = createBoard();
+        boardRepository.save(board);
+
+        PostRegisterServiceRequest request = PostRegisterServiceRequest.of("제목", "내용", 1L, board.getId());
+
+        //when //then
+        assertThatThrownBy(() -> postService.writePost(request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("존재하지 않는 사용자입니다");
+
+    }
+
+    @DisplayName("존재하지 않는 게시판에 글을 쓰려하면 예외가 발생한다")
+    @Test
+    void writePost3(){
+        //given
+        Member member = createMember("member1");
+        memberRepository.save(member);
+
+        PostRegisterServiceRequest request = PostRegisterServiceRequest.of("제목", "내용", member.getId(), 1L);
+
+        //when //then
+        assertThatThrownBy(() -> postService.writePost(request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("존재하지 않는 게시판입니다");
+
     }
 
     private static Board createBoard() {
