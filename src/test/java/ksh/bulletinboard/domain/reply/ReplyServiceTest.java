@@ -60,4 +60,31 @@ class ReplyServiceTest {
 
      }
 
+     @DisplayName("댓글에 대한 대댓글을 작성한다")
+     @Test
+     void createReply(){
+         //given
+         Comment comment = Comment.builder()
+                 .content("댓글")
+                 .build();
+         commentRepository.save(comment);
+
+         //when
+         ReplyServiceResponse response = replyService.createReply("대댓글", comment.getId());
+
+         //then
+         assertThat(response.getId()).isGreaterThan(0);
+         assertThat(response.getContent()).isEqualTo("대댓글");
+
+      }
+
+    @DisplayName("존재하지 않는 댓글에 대한 대댓글을 작성하려 하면 예외가 발생한다")
+    @Test
+    void createReplyWithException(){
+        //when //then
+        assertThatThrownBy(() -> replyService.createReply("대댓글", 1L))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("존재하지 않는 댓글입니다");
+    }
+
 }
