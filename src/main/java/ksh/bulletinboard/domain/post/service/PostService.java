@@ -6,6 +6,7 @@ import ksh.bulletinboard.domain.member.domain.Member;
 import ksh.bulletinboard.domain.member.repository.MemberRepository;
 import ksh.bulletinboard.domain.post.domain.Post;
 import ksh.bulletinboard.domain.post.repository.PostRepository;
+import ksh.bulletinboard.domain.post.service.dto.request.PostEditServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.request.PostRegisterServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterResponse;
@@ -71,11 +72,11 @@ public class PostService {
     }
 
     @Transactional
-    public PostServiceResponse editPost(long id, String title, String content) {
-        Post post = postRepository.findById(id)
+    public PostServiceResponse editPost(PostEditServiceRequest request) {
+        Post post = postRepository.findById(request.getPostId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다"));
 
-        post.editTitleAndContent(title, content);
+        post.editTitleAndContent(request.getTitle(), request.getContent());
 
         return PostServiceResponse.from(post);
     }

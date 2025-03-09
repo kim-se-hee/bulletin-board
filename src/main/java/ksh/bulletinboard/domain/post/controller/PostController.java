@@ -1,8 +1,10 @@
 package ksh.bulletinboard.domain.post.controller;
 
 import jakarta.validation.Valid;
+import ksh.bulletinboard.domain.post.controller.dto.request.PostEditRequest;
 import ksh.bulletinboard.domain.post.controller.dto.request.PostRegisterRequest;
 import ksh.bulletinboard.domain.post.service.PostService;
+import ksh.bulletinboard.domain.post.service.dto.request.PostEditServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostServiceResponse;
@@ -55,6 +57,15 @@ public class PostController {
 
     ) {
         PostRegisterResponse response = postService.writePost(request.toServiceRequest(memberId));
+
+        return  ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+    }
+
+    @PostMapping("/post/{postId}")
+    public ResponseEntity<PostServiceResponse> edit(@Valid @RequestBody PostEditRequest request) {
+        PostServiceResponse response = postService.editPost(request.toServiceRequest());
 
         return  ResponseEntity
                 .status(HttpStatus.CREATED)
