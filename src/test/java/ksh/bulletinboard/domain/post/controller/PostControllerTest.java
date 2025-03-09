@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -78,15 +79,18 @@ class PostControllerTest {
     @Test
     void write() throws Exception {
         //given
-        PostRegisterRequest request = new PostRegisterRequest("제목", "내용", 1L, 1L);
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("memberId", 1L);
+        PostRegisterRequest request = new PostRegisterRequest("제목", "내용", 1L);
 
         //when //then
         mockMvc.perform(
                         post("/post")
                                 .content(objectMapper.writeValueAsString(request))
+                                .session(session)
                                 .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
 }
