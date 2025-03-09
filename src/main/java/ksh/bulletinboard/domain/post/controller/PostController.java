@@ -49,8 +49,12 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<PostRegisterResponse> write(@Valid @RequestBody PostRegisterRequest request) {
-        PostRegisterResponse response = postService.writePost(request.toServiceRequest());
+    public ResponseEntity<PostRegisterResponse> write(
+            @Valid @RequestBody PostRegisterRequest request,
+            @SessionAttribute("memberId") long memberId
+
+    ) {
+        PostRegisterResponse response = postService.writePost(request.toServiceRequest(memberId));
 
         return  ResponseEntity
                 .status(HttpStatus.CREATED)

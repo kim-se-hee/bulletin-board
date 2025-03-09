@@ -18,19 +18,15 @@ public class PostRegisterRequest {
     String content;
 
     @NotNull
-    Long memberId;
-
-    @NotNull
     Long boardId;
 
-    public PostRegisterServiceRequest toServiceRequest() {
+    public PostRegisterServiceRequest toServiceRequest(long memberId) {
         return PostRegisterServiceRequest.of(title, content, memberId, boardId);
     }
 
-    public PostRegisterRequest(String title, String content, Long memberId, Long boardId) {
+    public PostRegisterRequest(String title, String content, Long boardId) {
         this.title = title;
         this.content = content;
-        this.memberId = memberId;
         this.boardId = boardId;
     }
 
