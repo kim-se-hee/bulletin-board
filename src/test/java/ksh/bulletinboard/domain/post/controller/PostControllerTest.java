@@ -3,6 +3,7 @@ package ksh.bulletinboard.domain.post.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ksh.bulletinboard.domain.post.controller.dto.request.PostRegisterRequest;
 import ksh.bulletinboard.domain.post.service.PostService;
+import ksh.bulletinboard.domain.post.service.dto.request.PostEditServiceRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +92,24 @@ class PostControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
                 .andExpect(status().isCreated());
+    }
+
+    @DisplayName("게시글을 수정한다")
+    @Test
+    void edit() throws Exception {
+        //given
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("memberId", 1L);
+        PostEditServiceRequest request = new PostEditServiceRequest(1L, "title2", "content2");
+
+        //when //then
+        mockMvc.perform(
+                        post("/post/1")
+                                .content(objectMapper.writeValueAsString(request))
+                                .session(session)
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk());
     }
 
 }
