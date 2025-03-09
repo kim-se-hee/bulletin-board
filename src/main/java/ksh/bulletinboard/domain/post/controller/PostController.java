@@ -1,16 +1,16 @@
 package ksh.bulletinboard.domain.post.controller;
 
+import jakarta.validation.Valid;
+import ksh.bulletinboard.domain.post.controller.dto.request.PostRegisterRequest;
 import ksh.bulletinboard.domain.post.service.PostService;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
+import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostServiceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,6 +45,15 @@ public class PostController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @PostMapping("/post")
+    public ResponseEntity<PostRegisterResponse> write(@Valid @RequestBody PostRegisterRequest request) {
+        PostRegisterResponse response = postService.writePost(request.toServiceRequest());
+
+        return  ResponseEntity
+                .status(HttpStatus.CREATED)
                 .body(response);
     }
 
