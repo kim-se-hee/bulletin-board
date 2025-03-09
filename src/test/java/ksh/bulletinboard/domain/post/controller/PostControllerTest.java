@@ -1,14 +1,19 @@
 package ksh.bulletinboard.domain.post.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import ksh.bulletinboard.domain.post.controller.dto.request.PostRegisterRequest;
 import ksh.bulletinboard.domain.post.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -18,12 +23,15 @@ class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private PostService postService;
 
     @DisplayName("게시글을 조회한다")
     @Test
-    void post() throws Exception {
+    void showPost() throws Exception {
         //when //then
         mockMvc.perform(
                         get("/board/1/post/1")
@@ -37,8 +45,8 @@ class PostControllerTest {
     void postsWithTitle() throws Exception {
         //when //then
         mockMvc.perform(
-                get("/board/1/posts")
-                        .queryParam("title", "글")
+                        get("/board/1/posts")
+                                .queryParam("title", "글")
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
@@ -62,6 +70,21 @@ class PostControllerTest {
                         get("/board/1/posts")
                                 .queryParam("pageNum", "0")
                                 .queryParam("pageSize", "10")
+                ).andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @DisplayName("게시글을 작성한다")
+    @Test
+    void write() throws Exception {
+        //given
+        PostRegisterRequest request = new PostRegisterRequest("제목", "내용", 1L, 1L);
+
+        //when //then
+        mockMvc.perform(
+                        post("/post")
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
                 .andExpect(status().isOk());
     }
