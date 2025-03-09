@@ -70,4 +70,14 @@ public class PostService {
         return PostRegisterResponse.from(post);
     }
 
+    @Transactional
+    public PostServiceResponse editPost(long id, String title, String content) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다"));
+
+        post.editTitleAndContent(title, content);
+
+        return PostServiceResponse.from(post);
+    }
+
 }

@@ -45,4 +45,8 @@ public class Post extends BaseEntity {
         this.views++;
     }
 
+    public void editTitleAndContent(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }
