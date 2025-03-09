@@ -32,6 +32,9 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    @Version
+    private Long version;
+
     @Builder
     private Post(String title, String content, Long views, Board board, Member member) {
         this.title = title;

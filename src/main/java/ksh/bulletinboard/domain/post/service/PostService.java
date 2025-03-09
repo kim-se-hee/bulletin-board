@@ -79,6 +79,9 @@ public class PostService {
         return PostServiceResponse.from(post);
     }
 
+    /*
+     * AOP 학습 후 재시도 로직 추가
+     */
     @Transactional
     public long increaseView(long id) {
         Post post = postRepository.findById(id)
