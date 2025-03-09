@@ -26,8 +26,9 @@ public class MemberService {
         return MemberJoinResponse.from(member);
     }
 
-    public Member getByNicknameAndPassword(String nickname, String password) {
+    public long getLoginMemberId(String nickname, String password) {
         return memberRepository.findByNicknameAndPassword(nickname, password)
+                .map(Member::getId)
                 .orElseThrow(() -> new IllegalArgumentException("회원 정보가 일치하지 않습니다"));
     }
 
