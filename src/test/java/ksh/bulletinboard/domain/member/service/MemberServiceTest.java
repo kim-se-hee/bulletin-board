@@ -2,14 +2,15 @@ package ksh.bulletinboard.domain.member.service;
 
 import ksh.bulletinboard.domain.member.domain.Member;
 import ksh.bulletinboard.domain.member.repository.MemberRepository;
-import org.assertj.core.api.Assertions;
+import ksh.bulletinboard.domain.member.service.dto.response.MemberJoinResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -29,14 +30,10 @@ class MemberServiceTest {
         String password = "123456";
 
         //when
-        Member member = memberService.join(nickname, password);
+        MemberJoinResponse response = memberService.join(nickname, password);
 
         //then
-        assertThat(member)
-                .extracting("nickname", "password")
-                .containsExactly(nickname, password);
-
-        assertThat(member.getId()).isNotNull();
+        assertThat(response.getNickname()).isEqualTo(nickname);
 
      }
 
@@ -58,7 +55,7 @@ class MemberServiceTest {
 
       }
 
-      @DisplayName("이미 가입한 회원은 아이디와 비밀번호로 조회한다")
+      @DisplayName("이미 가입한 회원의 id를 아이디와 비밀번호로 조회한다")
       @Test
       void getByNicknameAndPassword(){
           //given
@@ -72,10 +69,10 @@ class MemberServiceTest {
           memberRepository.save(member);
 
           //when
-          Member joinnedMember = memberService.getByNicknameAndPassword(nickname, password);
+          long loginMemberId = memberService.getLoginMemberId(nickname, password);
 
           //then
-          assertThat(joinnedMember).isEqualTo(member);
+          assertThat(loginMemberId).isEqualTo(member.getId());
 
        }
 
@@ -93,7 +90,7 @@ class MemberServiceTest {
         memberRepository.save(member);
 
         //when //then
-        assertThatThrownBy(() -> memberService.getByNicknameAndPassword("잘못된 이름", password))
+        assertThatThrownBy(() -> memberService.getLoginMemberId("잘못된 이름", password))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("회원 정보가 일치하지 않습니다");
 
@@ -113,7 +110,7 @@ class MemberServiceTest {
         memberRepository.save(member);
 
         //when //then
-        assertThatThrownBy(() -> memberService.getByNicknameAndPassword(nickname, "48545"))
+        assertThatThrownBy(() -> memberService.getLoginMemberId(nickname, "48545"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("회원 정보가 일치하지 않습니다");
 
