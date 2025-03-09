@@ -68,7 +68,7 @@ public class PostController {
         PostServiceResponse response = postService.editPost(request.toServiceRequest());
 
         return  ResponseEntity
-                .status(HttpStatus.CREATED)
+                .status(HttpStatus.OK)
                 .body(response);
     }
 
