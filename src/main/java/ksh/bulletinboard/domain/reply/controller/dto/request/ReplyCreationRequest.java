@@ -15,4 +15,8 @@ public class ReplyCreationRequest {
     @NotNull(message = "댓글 id는 필수입니다")
     private Long commentId;
 
+    public ReplyCreationRequest(String content, Long commentId) {
+        this.content = content;
+        this.commentId = commentId;
+    }
 }
