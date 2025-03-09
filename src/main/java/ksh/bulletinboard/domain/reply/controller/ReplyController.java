@@ -37,4 +37,16 @@ public class ReplyController {
                 .body(response);
     }
 
+    @PostMapping("/reply/{replyId}")
+    public ResponseEntity<ReplyServiceResponse> edit(
+            @PathVariable("replyId") Long id,
+            @RequestBody String content
+    ) {
+        ReplyServiceResponse response = replyService.editReply(id, content);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
 }

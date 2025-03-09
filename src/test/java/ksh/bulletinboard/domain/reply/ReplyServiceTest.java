@@ -87,4 +87,31 @@ class ReplyServiceTest {
                 .hasMessage("존재하지 않는 댓글입니다");
     }
 
+    @DisplayName("작성한 대댓글을 수정한다")
+    @Test
+    void editReply(){
+        //given
+        Reply reply = Reply.builder()
+                .content("수정 전")
+                .build();
+        replyRepository.save(reply);
+
+        //when
+        ReplyServiceResponse response = replyService.editReply(reply.getId(), "수정 후");
+
+        //then
+        assertThat(response.getId()).isEqualTo(reply.getId());
+        assertThat(response.getContent()).isEqualTo("수정 후");
+
+    }
+
+    @DisplayName("존재하지 않는 댓글에 대한 대댓글을 수정하려 하면 예외가 발생한다")
+    @Test
+    void editReplyWithException(){
+        //when //then
+        assertThatThrownBy(() -> replyService.editReply(10L, "내용"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("존재하지 않는 대댓글입니다");
+    }
+
 }

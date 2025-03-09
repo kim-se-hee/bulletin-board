@@ -59,4 +59,22 @@ class ReplyControllerTest {
 
     }
 
+    @DisplayName("대댓글을 수정한다")
+    @Test
+    void editReply() throws Exception {
+        //given
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("memberId", 1L);
+
+        //when //then
+        mockMvc.perform(
+                        post("/reply/1")
+                                .session(session)
+                                .content("{\"content\":\"내용\"}")
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
 }
