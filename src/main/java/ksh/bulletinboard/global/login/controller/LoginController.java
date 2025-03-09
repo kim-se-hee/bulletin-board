@@ -30,4 +30,14 @@ public class LoginController {
                 .body(true);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Boolean> logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        session.invalidate();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(true);
+    }
+
 }
