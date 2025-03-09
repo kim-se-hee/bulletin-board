@@ -41,12 +41,10 @@ public class PostService {
         return PostPageServiceResponse.from(page);
     }
 
-    @Transactional
     public PostServiceResponse getSinglePost(long id){
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다"));
 
-        post.increaseViews();
         return PostServiceResponse.from(post);
     }
 
@@ -79,6 +77,15 @@ public class PostService {
         post.editTitleAndContent(request.getTitle(), request.getContent());
 
         return PostServiceResponse.from(post);
+    }
+
+    @Transactional
+    public long increaseView(long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시글입니다"));
+
+        post.increaseViews();
+        return post.getViews();
     }
 
 }

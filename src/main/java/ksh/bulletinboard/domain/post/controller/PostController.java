@@ -72,4 +72,13 @@ public class PostController {
                 .body(response);
     }
 
+    @PostMapping("/post/{postId}/views")
+    public ResponseEntity<Long> increaseViews(@PathVariable("postId") long postId) {
+        long updatedViews = postService.increaseView(postId);
+
+        return  ResponseEntity
+                .status(HttpStatus.OK)
+                .body(updatedViews);
+    }
+
 }
