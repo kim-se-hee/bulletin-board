@@ -14,9 +14,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .order(1)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
-                        "/login", "/boards", "/post/{postId}/comments", "/member",
+                        "/login", "/boards", "/post/{postId}/comments", "/member", "/member/**",
                         "/board/{boardId}/post/{postId}", "/board/{boardId}/posts",
-                        "/post/{postId}/reply"
+                        "/post/{postId}/reply", "/post/{postId}/views", "/error"
                 );
     }
 
