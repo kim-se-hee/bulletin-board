@@ -2,7 +2,7 @@ package ksh.bulletinboard.domain.comment.controller;
 
 import ksh.bulletinboard.domain.comment.controller.dto.response.CommentListResponse;
 import ksh.bulletinboard.domain.comment.controller.dto.response.CommentResponse;
-import ksh.bulletinboard.domain.comment.service.dto.response.CommentSerivceResponse;
+import ksh.bulletinboard.domain.comment.service.dto.response.CommentServiceResponse;
 import ksh.bulletinboard.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class CommentController {
             @PathVariable("postId") Long postId,
             @RequestParam(value = "includeReply", required = false, defaultValue = "false") boolean includeReply
     ) {
-        List<CommentSerivceResponse> comments;
+        List<CommentServiceResponse> comments;
         if(includeReply){
             comments = commentService.getCommentsWithRepliesOfPost(postId);
         }else{

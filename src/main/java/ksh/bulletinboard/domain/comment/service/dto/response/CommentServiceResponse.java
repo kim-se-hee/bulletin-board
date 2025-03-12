@@ -11,27 +11,27 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class CommentSerivceResponse {
+public class CommentServiceResponse {
 
     long id;
     String content;
     List<ReplyServiceResponse> replies;
 
-    public static CommentSerivceResponse from(Comment comment) {
-        return new CommentSerivceResponse(comment);
+    public static CommentServiceResponse from(Comment comment) {
+        return new CommentServiceResponse(comment);
     }
 
-    public static CommentSerivceResponse from(Comment comment, List<Reply> replies) {
-        return new CommentSerivceResponse(comment, replies);
+    public static CommentServiceResponse from(Comment comment, List<Reply> replies) {
+        return new CommentServiceResponse(comment, replies);
     }
 
-    private CommentSerivceResponse(Comment comment) {
+    private CommentServiceResponse(Comment comment) {
         this.id = comment.getId();
         this.content = comment.getContent();
         this.replies = new ArrayList<>();
     }
 
-    private CommentSerivceResponse(Comment comment, List<Reply> replies) {
+    private CommentServiceResponse(Comment comment, List<Reply> replies) {
         this.id = comment.getId();
         this.content = comment.getContent();
         this.replies = replies.stream()

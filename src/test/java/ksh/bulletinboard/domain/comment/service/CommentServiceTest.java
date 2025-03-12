@@ -1,7 +1,7 @@
 package ksh.bulletinboard.domain.comment.service;
 
 import ksh.bulletinboard.domain.comment.domain.Comment;
-import ksh.bulletinboard.domain.comment.service.dto.response.CommentSerivceResponse;
+import ksh.bulletinboard.domain.comment.service.dto.response.CommentServiceResponse;
 import ksh.bulletinboard.domain.comment.repository.CommentRepository;
 import ksh.bulletinboard.domain.post.domain.Post;
 import ksh.bulletinboard.domain.post.repository.PostRepository;
@@ -60,7 +60,7 @@ class CommentServiceTest {
         commentRepository.saveAll(List.of(comment1, comment2, comment3));
 
         //when
-        List<CommentSerivceResponse> commentsOfPost = commentService.getCommentsOfPost(post.getId());
+        List<CommentServiceResponse> commentsOfPost = commentService.getCommentsOfPost(post.getId());
 
         //then
         assertThat(commentsOfPost).hasSize(3)
@@ -106,7 +106,7 @@ class CommentServiceTest {
          replyRepository.saveAll(List.of(reply1, reply2, reply3));
 
          //when
-         List<CommentSerivceResponse> response = commentService.getCommentsWithRepliesOfPost(post.getId());
+         List<CommentServiceResponse> response = commentService.getCommentsWithRepliesOfPost(post.getId());
 
          //then
          assertThat(response).hasSize(2)

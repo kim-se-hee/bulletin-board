@@ -1,6 +1,6 @@
 package ksh.bulletinboard.domain.comment.controller.dto.response;
 
-import ksh.bulletinboard.domain.comment.service.dto.response.CommentSerivceResponse;
+import ksh.bulletinboard.domain.comment.service.dto.response.CommentServiceResponse;
 import ksh.bulletinboard.domain.reply.controller.dto.response.ReplyResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +15,11 @@ public class CommentResponse {
     String content;
     List<ReplyResponse> replies;
 
-    public static CommentResponse from(CommentSerivceResponse response) {
+    public static CommentResponse from(CommentServiceResponse response) {
         return new CommentResponse(response);
     }
 
-    private CommentResponse(CommentSerivceResponse response) {
+    private CommentResponse(CommentServiceResponse response) {
         this.id = response.getId();
         this.content = response.getContent();
         this.replies = response.getReplies()
