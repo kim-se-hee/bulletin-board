@@ -3,8 +3,9 @@ package ksh.bulletinboard.domain.post.repository;
 import ksh.bulletinboard.domain.post.domain.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PostRepository extends JpaRepository<Post, Long>,  PostRepositoryCustom {
+public interface PostRepositoryCustom {
+
+    Page<Post> findPostsOfBoard(long boardId, String title, String nickname, Pageable pageable);
 
 }

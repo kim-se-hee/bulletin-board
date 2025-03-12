@@ -2,16 +2,13 @@ package ksh.bulletinboard.domain.post.controller;
 
 import jakarta.validation.Valid;
 import ksh.bulletinboard.domain.post.controller.dto.request.PostEditRequest;
+import ksh.bulletinboard.domain.post.controller.dto.request.PostPageRequest;
 import ksh.bulletinboard.domain.post.controller.dto.request.PostRegisterRequest;
 import ksh.bulletinboard.domain.post.controller.dto.response.PostPageResponse;
 import ksh.bulletinboard.domain.post.controller.dto.response.PostRegisterResponse;
 import ksh.bulletinboard.domain.post.controller.dto.response.PostResponse;
 import ksh.bulletinboard.domain.post.service.PostService;
-import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
-import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterServiceResponse;
-import ksh.bulletinboard.domain.post.service.dto.response.PostServiceResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,22 +29,8 @@ public class PostController {
     }
 
     @GetMapping("/boards/{boardId}/posts")
-    public ResponseEntity<PostPageResponse> posts(
-            @PathVariable("boardId") long boardId,
-            @RequestParam(value = "title", required = false) String title,
-            @RequestParam(value = "nickname", required = false) String nickname,
-            Pageable pageRequest
-    ) {
-        PostPageServiceResponse page;
-        if(title != null){
-            page = postService.getPostsOfBoardByTitle(boardId, title, pageRequest);
-        }else if(nickname != null){
-            page = postService.getPostsOfBoardByNickname(boardId, nickname, pageRequest);
-        }else{
-            page = postService.getPostsOfBoard(boardId, pageRequest);
-        }
-
-        PostPageResponse response = PostPageResponse.from(page);
+    public ResponseEntity<PostPageResponse> posts(@PathVariable("boardId") long boardId, @Valid @ModelAttribute PostPageRequest request) {
+        PostPageResponse response = PostPageResponse.from(postService.getPostsOfBoard(boardId, request.toServiceRequest()));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);

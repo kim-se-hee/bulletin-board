@@ -7,13 +7,14 @@ import ksh.bulletinboard.domain.member.repository.MemberRepository;
 import ksh.bulletinboard.domain.post.domain.Post;
 import ksh.bulletinboard.domain.post.repository.PostRepository;
 import ksh.bulletinboard.domain.post.service.dto.request.PostEditServiceRequest;
+import ksh.bulletinboard.domain.post.service.dto.request.PostPageServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.request.PostRegisterServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterServiceResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostServiceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,18 +27,9 @@ public class PostService {
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
 
-    public PostPageServiceResponse getPostsOfBoard(long id, Pageable pageRequest) {
-        Page<Post> page = postRepository.findByBoardId(id, pageRequest);
-        return PostPageServiceResponse.from(page);
-    }
-
-    public PostPageServiceResponse getPostsOfBoardByTitle(long id, String title, Pageable pageRequest) {
-        Page<Post> page = postRepository.findByBoardIdAndTitleContaining(id, title, pageRequest);
-        return PostPageServiceResponse.from(page);
-    }
-
-    public PostPageServiceResponse getPostsOfBoardByNickname(long id, String nickname, Pageable pageRequest) {
-        Page<Post> page = postRepository.findByBoardIdAndMemberNickname(id, nickname, pageRequest);
+    public PostPageServiceResponse getPostsOfBoard(long boardId, PostPageServiceRequest request) {
+        PageRequest pageRequest = PageRequest.of(request.getPageNum(), request.getPageSize());
+        Page<Post> page = postRepository.findPostsOfBoard(boardId, request.getTitle(), request.getTitle(), pageRequest);
         return PostPageServiceResponse.from(page);
     }
 
