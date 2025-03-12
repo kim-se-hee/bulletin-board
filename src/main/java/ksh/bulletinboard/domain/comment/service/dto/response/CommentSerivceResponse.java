@@ -1,4 +1,4 @@
-package ksh.bulletinboard.domain.comment.dto.response;
+package ksh.bulletinboard.domain.comment.service.dto.response;
 
 import ksh.bulletinboard.domain.comment.domain.Comment;
 import ksh.bulletinboard.domain.reply.domain.Reply;

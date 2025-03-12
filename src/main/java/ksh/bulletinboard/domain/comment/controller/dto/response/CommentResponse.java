@@ -1,6 +1,6 @@
 package ksh.bulletinboard.domain.comment.controller.dto.response;
 
-import ksh.bulletinboard.domain.comment.dto.response.CommentSerivceResponse;
+import ksh.bulletinboard.domain.comment.service.dto.response.CommentSerivceResponse;
 import ksh.bulletinboard.domain.reply.controller.dto.response.ReplyResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

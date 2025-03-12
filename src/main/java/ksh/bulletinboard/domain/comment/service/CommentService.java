@@ -1,7 +1,7 @@
 package ksh.bulletinboard.domain.comment.service;
 
 import ksh.bulletinboard.domain.comment.domain.Comment;
-import ksh.bulletinboard.domain.comment.dto.response.CommentSerivceResponse;
+import ksh.bulletinboard.domain.comment.service.dto.response.CommentSerivceResponse;
 import ksh.bulletinboard.domain.comment.repository.CommentRepository;
 import ksh.bulletinboard.domain.reply.domain.Reply;
 import ksh.bulletinboard.domain.reply.repository.ReplyRepository;
