@@ -9,7 +9,7 @@ import ksh.bulletinboard.domain.post.repository.PostRepository;
 import ksh.bulletinboard.domain.post.service.dto.request.PostEditServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.request.PostRegisterServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
-import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterResponse;
+import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterServiceResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostServiceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -49,7 +49,7 @@ public class PostService {
     }
 
     @Transactional
-    public PostRegisterResponse writePost(PostRegisterServiceRequest request) {
+    public PostRegisterServiceResponse writePost(PostRegisterServiceRequest request) {
 
         Member writer = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다"));
@@ -66,7 +66,7 @@ public class PostService {
                 .build();
         postRepository.save(post);
 
-        return PostRegisterResponse.from(post);
+        return PostRegisterServiceResponse.from(post);
     }
 
     @Transactional

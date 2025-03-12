@@ -6,16 +6,16 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PostRegisterResponse {
+public class PostRegisterServiceResponse {
 
     private long id;
     private String title;
 
-    public static PostRegisterResponse from(Post post) {
-        return new PostRegisterResponse(post);
+    public static PostRegisterServiceResponse from(Post post) {
+        return new PostRegisterServiceResponse(post);
     }
 
-    private PostRegisterResponse(Post post) {
+    private PostRegisterServiceResponse(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
     }

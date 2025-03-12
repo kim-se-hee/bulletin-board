@@ -1,6 +1,6 @@
 package ksh.bulletinboard.domain.board.controller.dto.response;
 
-import ksh.bulletinboard.domain.board.service.dto.response.BoardServiceResponse;
+import ksh.bulletinboard.domain.board.controller.dto.BoardResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,13 +10,13 @@ import java.util.List;
 @NoArgsConstructor
 public class BoardListResponse {
 
-    private List<BoardServiceResponse> boards;
+    private List<BoardResponse> boards;
 
-    public static BoardListResponse of(List<BoardServiceResponse> boards) {
+    public static BoardListResponse of(List<BoardResponse> boards) {
         return new BoardListResponse(boards);
     }
 
-    private BoardListResponse(List<BoardServiceResponse> boards) {
+    private BoardListResponse(List<BoardResponse> boards) {
         this.boards = boards;
     }
 }

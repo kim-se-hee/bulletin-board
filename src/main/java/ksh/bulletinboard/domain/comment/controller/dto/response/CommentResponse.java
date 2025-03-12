@@ -1,24 +1,31 @@
 package ksh.bulletinboard.domain.comment.controller.dto.response;
 
-import ksh.bulletinboard.domain.comment.domain.Comment;
 import ksh.bulletinboard.domain.comment.dto.response.CommentSerivceResponse;
+import ksh.bulletinboard.domain.reply.controller.dto.response.ReplyResponse;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class CommentResponse {
 
-    private List<CommentSerivceResponse> comments;
+    long id;
+    String content;
+    List<ReplyResponse> replies;
 
-    public static CommentResponse of(List<CommentSerivceResponse> comments){
-        return new CommentResponse(comments);
+    public static CommentResponse from(CommentSerivceResponse response) {
+        return new CommentResponse(response);
     }
 
-    public CommentResponse(List<CommentSerivceResponse> comments) {
-        this.comments = comments;
+    private CommentResponse(CommentSerivceResponse response) {
+        this.id = response.getId();
+        this.content = response.getContent();
+        this.replies = response.getReplies()
+                .stream()
+                .map(ReplyResponse::from)
+                .toList();
     }
 
 }

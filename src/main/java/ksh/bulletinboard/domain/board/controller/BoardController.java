@@ -1,8 +1,8 @@
 package ksh.bulletinboard.domain.board.controller;
 
+import ksh.bulletinboard.domain.board.controller.dto.BoardResponse;
 import ksh.bulletinboard.domain.board.controller.dto.response.BoardListResponse;
 import ksh.bulletinboard.domain.board.service.BoardService;
-import ksh.bulletinboard.domain.board.service.dto.response.BoardServiceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,10 @@ public class BoardController {
 
     @GetMapping("/boards")
     public ResponseEntity<BoardListResponse> boards() {
-        List<BoardServiceResponse> boards = boardService.getAllBoards();
+        List<BoardResponse> boards = boardService.getAllBoards()
+                .stream()
+                .map(BoardResponse::from)
+                .toList();
         BoardListResponse response = BoardListResponse.of(boards);
 
         return ResponseEntity

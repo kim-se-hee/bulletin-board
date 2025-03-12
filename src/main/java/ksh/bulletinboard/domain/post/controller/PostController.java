@@ -3,10 +3,12 @@ package ksh.bulletinboard.domain.post.controller;
 import jakarta.validation.Valid;
 import ksh.bulletinboard.domain.post.controller.dto.request.PostEditRequest;
 import ksh.bulletinboard.domain.post.controller.dto.request.PostRegisterRequest;
+import ksh.bulletinboard.domain.post.controller.dto.response.PostPageResponse;
+import ksh.bulletinboard.domain.post.controller.dto.response.PostRegisterResponse;
+import ksh.bulletinboard.domain.post.controller.dto.response.PostResponse;
 import ksh.bulletinboard.domain.post.service.PostService;
-import ksh.bulletinboard.domain.post.service.dto.request.PostEditServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
-import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterResponse;
+import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterServiceResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostServiceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +23,8 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/boards/{boardId}/posts/{postId}")
-    public ResponseEntity<PostServiceResponse> post(@PathVariable("postId") long postId) {
-        PostServiceResponse response = postService.getSinglePost(postId);
+    public ResponseEntity<PostResponse> post(@PathVariable("postId") long postId) {
+        PostResponse response = PostResponse.from(postService.getSinglePost(postId));
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -30,21 +32,22 @@ public class PostController {
     }
 
     @GetMapping("/boards/{boardId}/posts")
-    public ResponseEntity<PostPageServiceResponse> posts(
+    public ResponseEntity<PostPageResponse> posts(
             @PathVariable("boardId") long boardId,
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "nickname", required = false) String nickname,
             Pageable pageRequest
     ) {
-        PostPageServiceResponse response;
+        PostPageServiceResponse page;
         if(title != null){
-            response = postService.getPostsOfBoardByTitle(boardId, title, pageRequest);
+            page = postService.getPostsOfBoardByTitle(boardId, title, pageRequest);
         }else if(nickname != null){
-            response = postService.getPostsOfBoardByNickname(boardId, nickname, pageRequest);
+            page = postService.getPostsOfBoardByNickname(boardId, nickname, pageRequest);
         }else{
-            response = postService.getPostsOfBoard(boardId, pageRequest);
+            page = postService.getPostsOfBoard(boardId, pageRequest);
         }
 
+        PostPageResponse response = PostPageResponse.from(page);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
@@ -56,17 +59,15 @@ public class PostController {
             @SessionAttribute("memberId") long memberId
 
     ) {
-        PostRegisterResponse response = postService.writePost(request.toServiceRequest(memberId));
-
+        PostRegisterResponse response = PostRegisterResponse.from(postService.writePost(request.toServiceRequest(memberId)));
         return  ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
 
     @PostMapping("/boards/{boardId}/posts/{postId}")
-    public ResponseEntity<PostServiceResponse> edit(@Valid @RequestBody PostEditRequest request) {
-        PostServiceResponse response = postService.editPost(request.toServiceRequest());
-
+    public ResponseEntity<PostResponse> edit(@Valid @RequestBody PostEditRequest request) {
+        PostResponse response = PostResponse.from(postService.editPost(request.toServiceRequest()));
         return  ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);

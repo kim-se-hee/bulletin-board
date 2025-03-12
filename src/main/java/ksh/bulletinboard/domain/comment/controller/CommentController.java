@@ -1,8 +1,8 @@
 package ksh.bulletinboard.domain.comment.controller;
 
+import ksh.bulletinboard.domain.comment.controller.dto.response.CommentListResponse;
 import ksh.bulletinboard.domain.comment.controller.dto.response.CommentResponse;
 import ksh.bulletinboard.domain.comment.dto.response.CommentSerivceResponse;
-import ksh.bulletinboard.domain.comment.repository.CommentRepository;
 import ksh.bulletinboard.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/boards/posts/{postId}/comments")
-    public ResponseEntity<CommentResponse> comments(
+    public ResponseEntity<CommentListResponse> comments(
             @PathVariable("postId") Long postId,
             @RequestParam(value = "includeReply", required = false, defaultValue = "false") boolean includeReply
     ) {
@@ -31,7 +31,11 @@ public class CommentController {
         }else{
             comments = commentService.getCommentsOfPost(postId);
         }
-        CommentResponse response = CommentResponse.of(comments);
+
+        List<CommentResponse> commentList = comments.stream()
+                .map(CommentResponse::from)
+                .toList();
+        CommentListResponse response = CommentListResponse.of(commentList);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

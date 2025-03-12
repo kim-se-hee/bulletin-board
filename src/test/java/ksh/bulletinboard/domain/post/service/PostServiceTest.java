@@ -9,9 +9,8 @@ import ksh.bulletinboard.domain.post.repository.PostRepository;
 import ksh.bulletinboard.domain.post.service.dto.request.PostEditServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.request.PostRegisterServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
-import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterResponse;
+import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterServiceResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostServiceResponse;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -201,7 +200,7 @@ class PostServiceTest {
         PostRegisterServiceRequest request = PostRegisterServiceRequest.of("제목", "내용", member.getId(), board.getId());
 
         //when
-        PostRegisterResponse response = postService.writePost(request);
+        PostRegisterServiceResponse response = postService.writePost(request);
 
         //then
         assertThat(response.getId()).isGreaterThan(0);

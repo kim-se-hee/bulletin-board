@@ -4,20 +4,19 @@ import ksh.bulletinboard.domain.reply.service.dto.ReplyServiceResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @NoArgsConstructor
 public class ReplyResponse {
 
-    private List<ReplyServiceResponse> replies;
+    private long id;
+    private String content;
 
-    public static ReplyResponse of(List<ReplyServiceResponse> replyDtos) {
-        return new ReplyResponse(replyDtos);
+    public static ReplyResponse from(ReplyServiceResponse response) {
+        return new ReplyResponse(response);
     }
 
-    private ReplyResponse(List<ReplyServiceResponse> replyDtos) {
-        this.replies = replyDtos;
+    private ReplyResponse(ReplyServiceResponse response) {
+        this.id = response.getId();
+        this.content = response.getContent();
     }
-
 }
