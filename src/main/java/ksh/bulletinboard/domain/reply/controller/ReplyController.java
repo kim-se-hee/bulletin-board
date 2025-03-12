@@ -18,9 +18,9 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
-    @GetMapping("/post/{postId}/reply")
-    public ResponseEntity<ReplyResponse> allReplies(@PathVariable("postId") long postId) {
-        List<ReplyServiceResponse> replies = replyService.getRepliesOfComment(postId);
+    @GetMapping("/boards/posts/comments/{commentId}/replies")
+    public ResponseEntity<ReplyResponse> allReplies(@PathVariable("commentId") long commentId) {
+        List<ReplyServiceResponse> replies = replyService.getRepliesOfComment(commentId);
         ReplyResponse response = ReplyResponse.of(replies);
 
         return ResponseEntity
@@ -28,7 +28,7 @@ public class ReplyController {
                 .body(response);
     }
 
-    @PostMapping("/reply")
+    @PostMapping("/boards/posts/comments/{commentId}/replies")
     public ResponseEntity<ReplyServiceResponse> write(@Valid @RequestBody ReplyCreationRequest request) {
         ReplyServiceResponse response = replyService.createReply(request.getContent(), request.getCommentId());
 
@@ -37,7 +37,7 @@ public class ReplyController {
                 .body(response);
     }
 
-    @PostMapping("/reply/{replyId}")
+    @PostMapping("/boards/posts/comments/{commentId}/replys/{replyId}")
     public ResponseEntity<ReplyServiceResponse> edit(
             @PathVariable("replyId") Long id,
             @RequestBody String content

@@ -20,7 +20,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/board/{boardId}/post/{postId}")
+    @GetMapping("/boards/{boardId}/posts/{postId}")
     public ResponseEntity<PostServiceResponse> post(@PathVariable("postId") long postId) {
         PostServiceResponse response = postService.getSinglePost(postId);
 
@@ -29,7 +29,7 @@ public class PostController {
                 .body(response);
     }
 
-    @GetMapping("/board/{boardId}/posts")
+    @GetMapping("/boards/{boardId}/posts")
     public ResponseEntity<PostPageServiceResponse> posts(
             @PathVariable("boardId") long boardId,
             @RequestParam(value = "title", required = false) String title,
@@ -50,7 +50,7 @@ public class PostController {
                 .body(response);
     }
 
-    @PostMapping("/post")
+    @PostMapping("/boards/{boardId}/posts")
     public ResponseEntity<PostRegisterResponse> write(
             @Valid @RequestBody PostRegisterRequest request,
             @SessionAttribute("memberId") long memberId
@@ -63,7 +63,7 @@ public class PostController {
                 .body(response);
     }
 
-    @PostMapping("/post/{postId}")
+    @PostMapping("/boards/{boardId}/posts/{postId}")
     public ResponseEntity<PostServiceResponse> edit(@Valid @RequestBody PostEditRequest request) {
         PostServiceResponse response = postService.editPost(request.toServiceRequest());
 
@@ -72,7 +72,7 @@ public class PostController {
                 .body(response);
     }
 
-    @PostMapping("/post/{postId}/views")
+    @PostMapping("/boards/posts/{postId}/views")
     public ResponseEntity<Long> increaseViews(@PathVariable("postId") long postId) {
         long updatedViews = postService.increaseView(postId);
 

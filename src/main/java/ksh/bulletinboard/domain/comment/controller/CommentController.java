@@ -20,7 +20,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/post/{postId}/comments")
+    @GetMapping("/boards/posts/{postId}/comments")
     public ResponseEntity<CommentResponse> comments(
             @PathVariable("postId") Long postId,
             @RequestParam(value = "includeReply", required = false, defaultValue = "false") boolean includeReply
