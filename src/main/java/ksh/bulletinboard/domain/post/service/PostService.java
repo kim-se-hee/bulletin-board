@@ -29,7 +29,7 @@ public class PostService {
 
     public PostPageServiceResponse getPostsOfBoard(long boardId, PostPageServiceRequest request) {
         PageRequest pageRequest = PageRequest.of(request.getPageNum(), request.getPageSize());
-        Page<Post> page = postRepository.findPostsOfBoard(boardId, request.getTitle(), request.getTitle(), pageRequest);
+        Page<Post> page = postRepository.findPostsOfBoard(boardId, request.getTitle(), request.getNickname(), pageRequest);
         return PostPageServiceResponse.from(page);
     }
 
