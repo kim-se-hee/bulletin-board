@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -15,7 +16,7 @@ public class PostPageServiceResponse {
     private int pageSize;
     private int totalPages;
     private boolean hasNext;
-    private List<PostPreviewServiceResponse> postResponses;
+    private List<PostPreviewServiceResponse> postResponses  = new ArrayList<>();
 
     public static PostPageServiceResponse from(Page<Post> page) {
         return new PostPageServiceResponse(page);
