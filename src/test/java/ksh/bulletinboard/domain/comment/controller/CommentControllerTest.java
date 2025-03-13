@@ -26,7 +26,7 @@ class CommentControllerTest {
     void comments() throws Exception {
         //when //then
         mockMvc.perform(
-                    get("/post/1/comments")
+                    get("/boards/posts/1/comments")
                 ).andDo(print())
                 .andExpect(status().isOk());
      }
@@ -36,7 +36,7 @@ class CommentControllerTest {
     void commentsWithReplies() throws Exception {
         //when //then
         mockMvc.perform(
-                        get("/post/1/comments")
+                        get("/boards/posts/1/comments")
                                 .param("includeReply", "true")
                 ).andDo(print())
                 .andExpect(status().isOk());

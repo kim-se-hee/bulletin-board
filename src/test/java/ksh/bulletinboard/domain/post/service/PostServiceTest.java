@@ -7,6 +7,7 @@ import ksh.bulletinboard.domain.member.repository.MemberRepository;
 import ksh.bulletinboard.domain.post.domain.Post;
 import ksh.bulletinboard.domain.post.repository.PostRepository;
 import ksh.bulletinboard.domain.post.service.dto.request.PostEditServiceRequest;
+import ksh.bulletinboard.domain.post.service.dto.request.PostPageServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.request.PostRegisterServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterServiceResponse;
@@ -50,10 +51,10 @@ class PostServiceTest {
         Post post3 = createPost("글3", board);
         postRepository.saveAll(List.of(post1, post2, post3));
 
-        PageRequest pageRequest = PageRequest.of(1, 2);
+        PostPageServiceRequest request = new PostPageServiceRequest(null, null, 1, 2);
 
         //when
-        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), pageRequest);
+        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), request);
 
         //then
         assertThat(response)
@@ -78,10 +79,10 @@ class PostServiceTest {
         Post post3 = createPost("글3", board);
         postRepository.saveAll(List.of(post1, post2, post3));
 
-        PageRequest pageRequest = PageRequest.of(3, 2);
+        PostPageServiceRequest request = new PostPageServiceRequest(null, null, 3, 2);
 
         //when
-        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), pageRequest);
+        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), request);
 
         //then
         assertThat(response.getPostResponses()).isEmpty();
@@ -100,10 +101,10 @@ class PostServiceTest {
         Post post3 = createPost("글789", board);
         postRepository.saveAll(List.of(post1, post2, post3));
 
-        PageRequest pageRequest = PageRequest.of(0, 2);
+        PostPageServiceRequest request = new PostPageServiceRequest("5", null, 0, 2);
 
         //when
-        PostPageServiceResponse response = postService.getPostsOfBoardByTitle(board.getId(), "5", pageRequest);
+        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), request);
 
         //then
         assertThat(response)
@@ -132,10 +133,10 @@ class PostServiceTest {
         Post post3 = createPost("글789", board, member2);
         postRepository.saveAll(List.of(post1, post2, post3));
 
-        PageRequest pageRequest = PageRequest.of(0, 2);
+        PostPageServiceRequest request = new PostPageServiceRequest(null, "회원1", 0, 2);
 
         //when
-        PostPageServiceResponse response = postService.getPostsOfBoardByNickname(board.getId(), "회원1", pageRequest);
+        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), request);
 
         //then
         assertThat(response)
@@ -151,14 +152,17 @@ class PostServiceTest {
 
     }
 
-    @DisplayName("요청한 게시글을 조회하면 게시글의 정보가 반환되며 조회수가 증가한다")
+    @DisplayName("요청한 게시글을 조회하면 게시글의 정보가 반환된다")
     @Test
     void getSinglePost1() {
         //given
         Board board = createBoard();
         boardRepository.save(board);
 
-        Post post = createPost("글", board);
+        Member member = createMember("member1");
+        memberRepository.save(member);
+
+        Post post = createPost("글", board, member);
         postRepository.save(post);
 
         //when
@@ -166,8 +170,8 @@ class PostServiceTest {
 
         //then
         assertThat(response)
-                .extracting("title", "content", "views")
-                .containsExactly("글", "본문", 2L);
+                .extracting("title", "content")
+                .containsExactly("글", "본문");
 
     }
 
@@ -251,6 +255,7 @@ class PostServiceTest {
                 .title("title1")
                 .content("content1")
                 .member(member)
+                .views(1L)
                 .build();
         postRepository.save(post);
 
