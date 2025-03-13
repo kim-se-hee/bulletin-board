@@ -2,6 +2,7 @@ package ksh.bulletinboard.domain.post.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import ksh.bulletinboard.domain.post.domain.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,9 +15,11 @@ import static ksh.bulletinboard.domain.post.domain.QPost.post;
 public class PostRepositoryImpl implements PostRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+    private final EntityManager em;
 
-    public PostRepositoryImpl(JPAQueryFactory queryFactory) {
-        this.queryFactory = queryFactory;
+    public PostRepositoryImpl(EntityManager em) {
+        this.em = em;
+        this.queryFactory = new JPAQueryFactory(em);
     }
 
     @Override
@@ -26,7 +29,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         builder.and(post.board.id.eq(boardId));
 
         if (title != null) {
-            builder.and(post.title.eq(title));
+            builder.and(post.title.contains(title));
         }
 
         if (nickname != null) {
