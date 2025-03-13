@@ -31,7 +31,7 @@ public class ReplyController {
                 .body(response);
     }
 
-    @PostMapping("/boards/posts/comments/{commentId}/replies")
+    @PostMapping("/boards/posts/comments/{commentId}/replies/new")
     public ResponseEntity<ReplyResponse> write(@Valid @RequestBody ReplyCreationRequest request) {
         ReplyResponse response = ReplyResponse.from(replyService.createReply(request.getContent(), request.getCommentId()));
 
@@ -40,7 +40,7 @@ public class ReplyController {
                 .body(response);
     }
 
-    @PostMapping("/boards/posts/comments/{commentId}/replys/{replyId}")
+    @PostMapping("/boards/posts/comments/{commentId}/replies/{replyId}/edit")
     public ResponseEntity<ReplyResponse> edit(
             @PathVariable("replyId") Long id,
             @RequestBody String content

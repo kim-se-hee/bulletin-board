@@ -36,7 +36,7 @@ public class PostController {
                 .body(response);
     }
 
-    @PostMapping("/boards/{boardId}/posts")
+    @PostMapping("/boards/{boardId}/posts/new")
     public ResponseEntity<PostRegisterResponse> write(
             @Valid @RequestBody PostRegisterRequest request,
             @SessionAttribute("memberId") long memberId
@@ -48,7 +48,7 @@ public class PostController {
                 .body(response);
     }
 
-    @PostMapping("/boards/{boardId}/posts/{postId}")
+    @PostMapping("/boards/{boardId}/posts/{postId}/edit")
     public ResponseEntity<PostResponse> edit(@Valid @RequestBody PostEditRequest request) {
         PostResponse response = PostResponse.from(postService.editPost(request.toServiceRequest()));
         return  ResponseEntity
