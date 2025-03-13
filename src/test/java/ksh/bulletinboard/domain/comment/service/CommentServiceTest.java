@@ -60,7 +60,7 @@ class CommentServiceTest {
         commentRepository.saveAll(List.of(comment1, comment2, comment3));
 
         //when
-        List<CommentServiceResponse> commentsOfPost = commentService.getCommentsOfPost(post.getId());
+        List<CommentServiceResponse> commentsOfPost = commentService.getCommentsOfPost(post.getId(), false);
 
         //then
         assertThat(commentsOfPost).hasSize(3)
@@ -106,7 +106,7 @@ class CommentServiceTest {
          replyRepository.saveAll(List.of(reply1, reply2, reply3));
 
          //when
-         List<CommentServiceResponse> response = commentService.getCommentsWithRepliesOfPost(post.getId());
+         List<CommentServiceResponse> response = commentService.getCommentsOfPost(post.getId(), true);
 
          //then
          assertThat(response).hasSize(2)

@@ -19,29 +19,33 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
 
-    public List<CommentServiceResponse> getCommentsOfPost(long id){
-        return commentRepository.findByPostId(id).stream()
-                .map(CommentServiceResponse::from)
-                .toList();
-    }
 
-    public List<CommentServiceResponse> getCommentsWithRepliesOfPost(long id){
+    public List<CommentServiceResponse> getCommentsOfPost(long id, boolean includeReply){
         List<Comment> comments = commentRepository.findByPostId(id);
+
+        if(!includeReply){
+            return comments.stream()
+                    .map(CommentServiceResponse::from)
+                    .toList();
+        }
 
         List<Long> commentIds = comments.stream()
                 .map(Comment::getId)
                 .toList();
 
-        Map<Comment, List<Reply>> map = replyRepository.findByCommentIdIn(commentIds).stream()
-                .collect(Collectors.groupingBy(Reply::getComment));
+        Map<Comment, List<Reply>> map = groupingRepliesByComment(commentIds);
 
         return comments.stream()
                 .map(comment
-                        -> CommentServiceResponse.from(
-                                comment,
-                                map.getOrDefault(comment, List.of())
-                        ))
+                        -> CommentServiceResponse.from(comment, map.getOrDefault(comment, List.of()))
+                )
                 .toList();
+
+    }
+
+    private Map<Comment, List<Reply>> groupingRepliesByComment(List<Long> commentIds) {
+        return replyRepository.findByCommentIdIn(commentIds).stream()
+                .collect(Collectors.groupingBy(Reply::getComment));
     }
 
 }
