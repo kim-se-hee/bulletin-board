@@ -5,13 +5,16 @@ import ksh.bulletinboard.domain.post.controller.dto.request.PostEditRequest;
 import ksh.bulletinboard.domain.post.controller.dto.request.PostPageRequest;
 import ksh.bulletinboard.domain.post.controller.dto.request.PostRegisterRequest;
 import ksh.bulletinboard.domain.post.controller.dto.response.PostPageResponse;
-import ksh.bulletinboard.domain.post.controller.dto.response.PostRegisterResponse;
 import ksh.bulletinboard.domain.post.controller.dto.response.PostResponse;
 import ksh.bulletinboard.domain.post.service.PostService;
+import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterServiceResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,14 +39,18 @@ public class PostController {
                 .body(response);
     }
 
-    @PostMapping("/boards/{boardId}/posts/new")
-    public ResponseEntity<PostRegisterResponse> write(
-            @Valid @RequestBody PostRegisterRequest request,
-            @SessionAttribute("memberId") long memberId
+    @PostMapping(value =
+            "/boards/{boardId}/posts/new",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<PostRegisterServiceResponse> write(
+            @PathVariable("boardId") Long boardId,
+            @Valid @ModelAttribute PostRegisterRequest request,
+            @SessionAttribute("memberId")  long memberId
+    ) throws IOException {
+        PostRegisterServiceResponse response = postService.writePost(request.toServiceRequest(boardId, memberId));
 
-    ) {
-        PostRegisterResponse response = PostRegisterResponse.from(postService.writePost(request.toServiceRequest(memberId)));
-        return  ResponseEntity
+        return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
     }
@@ -64,5 +71,7 @@ public class PostController {
                 .status(HttpStatus.OK)
                 .body(updatedViews);
     }
+
+
 
 }

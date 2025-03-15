@@ -1,5 +1,7 @@
 package ksh.bulletinboard.domain.post.service;
 
+import ksh.bulletinboard.domain.attachment.domain.Attachment;
+import ksh.bulletinboard.domain.attachment.repository.AttachmentRepository;
 import ksh.bulletinboard.domain.board.domain.Board;
 import ksh.bulletinboard.domain.board.repository.BoardRepository;
 import ksh.bulletinboard.domain.member.domain.Member;
@@ -12,20 +14,29 @@ import ksh.bulletinboard.domain.post.service.dto.request.PostRegisterServiceRequ
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterServiceResponse;
 import ksh.bulletinboard.domain.post.service.dto.response.PostServiceResponse;
+import ksh.bulletinboard.global.util.FileUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class PostService {
 
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
+    private final AttachmentRepository attachmentRepository;
 
     public PostPageServiceResponse getPostsOfBoard(long boardId, PostPageServiceRequest request) {
         PageRequest pageRequest = PageRequest.of(request.getPageNum(), request.getPageSize());
@@ -41,7 +52,7 @@ public class PostService {
     }
 
     @Transactional
-    public PostRegisterServiceResponse writePost(PostRegisterServiceRequest request) {
+    public PostRegisterServiceResponse writePost(PostRegisterServiceRequest request) throws IOException {
 
         Member writer = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다"));
@@ -57,6 +68,22 @@ public class PostService {
                 .board(board)
                 .build();
         postRepository.save(post);
+
+        List<MultipartFile> multipartFiles = request.getMultipartFiles();
+
+        for (MultipartFile multipartFile : multipartFiles) {
+            String originalName = multipartFile.getOriginalFilename();
+            String storedName = FileUtils.createStoredFileName(originalName);
+            String fullPath = FileUtils.createFullPath(storedName);
+            multipartFile.transferTo(new File(fullPath));
+
+            Attachment attachment = Attachment.builder()
+                    .originalFilename(multipartFile.getOriginalFilename())
+                    .storedFilename(storedName)
+                    .post(post)
+                    .build();
+            attachmentRepository.save(attachment);
+        }
 
         return PostRegisterServiceResponse.from(post);
     }

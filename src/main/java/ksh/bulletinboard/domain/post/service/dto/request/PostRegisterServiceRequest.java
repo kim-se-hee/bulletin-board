@@ -2,6 +2,9 @@ package ksh.bulletinboard.domain.post.service.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -9,17 +12,16 @@ public class PostRegisterServiceRequest {
 
     String title;
     String content;
-    long memberId;
+    List<MultipartFile> multipartFiles;
     long boardId;
+    long memberId;
 
-    public static PostRegisterServiceRequest of(String title, String content, long memberId, long boardId) {
-        return new PostRegisterServiceRequest(title, content, memberId, boardId);
-    }
-
-    private PostRegisterServiceRequest(String title, String content, long memberId, long boardId) {
+    public PostRegisterServiceRequest(String title, String content, List<MultipartFile> multipartFiles, long boardId, long memberId) {
         this.title = title;
         this.content = content;
-        this.memberId = memberId;
+        this.multipartFiles = multipartFiles;
         this.boardId = boardId;
+        this.memberId = memberId;
     }
+
 }
