@@ -16,9 +16,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -193,7 +193,7 @@ class PostServiceTest {
 
     @DisplayName("회원이 게시판에 글을 작성한다")
     @Test
-    void writePost1(){
+    void writePost1() throws IOException {
         //given
         Board board = createBoard();
         boardRepository.save(board);
@@ -201,7 +201,7 @@ class PostServiceTest {
         Member member = createMember("member1");
         memberRepository.save(member);
 
-        PostRegisterServiceRequest request = PostRegisterServiceRequest.of("제목", "내용", member.getId(), board.getId());
+        PostRegisterServiceRequest request = new PostRegisterServiceRequest("제목", "내용", List.of(), board.getId(), member.getId());
 
         //when
         PostRegisterServiceResponse response = postService.writePost(request);
@@ -210,7 +210,7 @@ class PostServiceTest {
         assertThat(response.getId()).isGreaterThan(0);
         assertThat(response.getTitle()).isEqualTo("제목");
 
-     }
+    }
 
     @DisplayName("가입하지 않은 회원이 글을 쓰려하면 예외가 발생한다")
     @Test
@@ -219,7 +219,7 @@ class PostServiceTest {
         Board board = createBoard();
         boardRepository.save(board);
 
-        PostRegisterServiceRequest request = PostRegisterServiceRequest.of("제목", "내용", 1L, board.getId());
+        PostRegisterServiceRequest request = new PostRegisterServiceRequest("제목", "내용", List.of(), 1L, board.getId());
 
         //when //then
         assertThatThrownBy(() -> postService.writePost(request))
@@ -235,7 +235,7 @@ class PostServiceTest {
         Member member = createMember("member1");
         memberRepository.save(member);
 
-        PostRegisterServiceRequest request = PostRegisterServiceRequest.of("제목", "내용", member.getId(), 1L);
+        PostRegisterServiceRequest request = new PostRegisterServiceRequest("제목", "내용", List.of(), 1L, member.getId());
 
         //when //then
         assertThatThrownBy(() -> postService.writePost(request))
