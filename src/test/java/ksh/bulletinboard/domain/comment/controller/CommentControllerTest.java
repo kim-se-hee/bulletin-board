@@ -1,6 +1,6 @@
 package ksh.bulletinboard.domain.comment.controller;
 
-import ksh.bulletinboard.domain.comment.service.CommentService;
+import ksh.bulletinboard.domain.comment.application.CommentApplicationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ class CommentControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    CommentService commentService;
+    CommentApplicationService commentApplicationService;
 
     @DisplayName("게시글의 댓글을 조회한다")
     @Test

@@ -1,6 +1,6 @@
 package ksh.bulletinboard.domain.board.controller;
 
-import ksh.bulletinboard.domain.board.service.BoardService;
+import ksh.bulletinboard.domain.board.application.BoardApplicationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ class BoardControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    BoardService boardService;
+    BoardApplicationService boardApplicationService;
 
     @DisplayName("모든 게시판을 조회할 수 있다")
     @Test

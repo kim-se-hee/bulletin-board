@@ -2,11 +2,10 @@ package ksh.bulletinboard.domain.reply.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ksh.bulletinboard.domain.reply.controller.dto.request.ReplyCreationRequest;
-import ksh.bulletinboard.domain.reply.service.ReplyService;
+import ksh.bulletinboard.domain.reply.facade.ReplyApplicationService;
 import ksh.bulletinboard.domain.reply.service.dto.ReplyServiceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,7 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,7 +31,7 @@ class ReplyControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private ReplyService replyService;
+    private ReplyApplicationService replyApplicationService;
 
     @DisplayName("댓글의 대댓글을 조회한다")
     @Test
@@ -53,7 +53,7 @@ class ReplyControllerTest {
         session.setAttribute("memberId", 1L);
 
         ReplyServiceResponse serviceResponse = new ReplyServiceResponse();
-        BDDMockito.given(replyService.createReply(anyString(), anyLong()))
+        BDDMockito.given(replyApplicationService.createReply(anyString(), anyLong()))
                 .willReturn(serviceResponse);
 
         //when //then
@@ -75,7 +75,7 @@ class ReplyControllerTest {
         session.setAttribute("memberId", 1L);
 
         ReplyServiceResponse serviceResponse = new ReplyServiceResponse();
-        BDDMockito.given(replyService.editReply(anyLong(), anyString()))
+        BDDMockito.given(replyApplicationService.editReply(anyLong(), anyString()))
                         .willReturn(serviceResponse);
 
         //when //then

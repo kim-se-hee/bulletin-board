@@ -2,7 +2,6 @@ package ksh.bulletinboard.domain.member.service;
 
 import ksh.bulletinboard.domain.member.domain.Member;
 import ksh.bulletinboard.domain.member.repository.MemberRepository;
-import ksh.bulletinboard.domain.member.service.dto.response.MemberJoinResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ class MemberServiceTest {
         String password = "123456";
 
         //when
-        MemberJoinResponse response = memberService.join(nickname, password);
+        Member response = memberService.join(nickname, password);
 
         //then
         assertThat(response.getNickname()).isEqualTo(nickname);

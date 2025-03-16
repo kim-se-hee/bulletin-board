@@ -3,7 +3,6 @@ package ksh.bulletinboard.domain.reply;
 import ksh.bulletinboard.domain.comment.domain.Comment;
 import ksh.bulletinboard.domain.comment.repository.CommentRepository;
 import ksh.bulletinboard.domain.reply.domain.Reply;
-import ksh.bulletinboard.domain.reply.service.dto.ReplyServiceResponse;
 import ksh.bulletinboard.domain.reply.repository.ReplyRepository;
 import ksh.bulletinboard.domain.reply.service.ReplyService;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -51,7 +51,7 @@ class ReplyServiceTest {
         replyRepository.saveAll(List.of(reply1,reply2));
 
         //when
-        List<ReplyServiceResponse> repliesOfComment = replyService.getRepliesOfComment(comment.getId());
+        List<Reply> repliesOfComment = replyService.getRepliesOfComment(comment.getId());
 
         //then
         assertThat(repliesOfComment).hasSize(2)
@@ -70,7 +70,7 @@ class ReplyServiceTest {
          commentRepository.save(comment);
 
          //when
-         ReplyServiceResponse response = replyService.createReply("대댓글", comment.getId());
+         Reply response = replyService.createReply("대댓글", comment);
 
          //then
          assertThat(response.getId()).isGreaterThan(0);
@@ -78,14 +78,15 @@ class ReplyServiceTest {
 
       }
 
-    @DisplayName("존재하지 않는 댓글에 대한 대댓글을 작성하려 하면 예외가 발생한다")
+      //TODO: 애플리케이션 서비스 테스트로 이동
+    /*@DisplayName("존재하지 않는 댓글에 대한 대댓글을 작성하려 하면 예외가 발생한다")
     @Test
     void createReplyWithException(){
         //when //then
-        assertThatThrownBy(() -> replyService.createReply("대댓글", 1L))
+        assertThatThrownBy(() -> replyService.createReply("대댓글", Comment.builder().build()))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 댓글입니다");
-    }
+    }*/
 
     @DisplayName("작성한 대댓글을 수정한다")
     @Test
@@ -97,7 +98,7 @@ class ReplyServiceTest {
         replyRepository.save(reply);
 
         //when
-        ReplyServiceResponse response = replyService.editReply(reply.getId(), "수정 후");
+        Reply response = replyService.editReply(reply.getId(), "수정 후");
 
         //then
         assertThat(response.getId()).isEqualTo(reply.getId());

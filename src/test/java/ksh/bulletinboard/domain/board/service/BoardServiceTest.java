@@ -2,7 +2,6 @@ package ksh.bulletinboard.domain.board.service;
 
 import ksh.bulletinboard.domain.board.domain.Board;
 import ksh.bulletinboard.domain.board.repository.BoardRepository;
-import ksh.bulletinboard.domain.board.service.dto.response.BoardServiceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -41,7 +40,7 @@ class BoardServiceTest {
         boardRepository.saveAll(List.of(board1, board2, board3));
 
         //when
-        List<BoardServiceResponse> boards = boardService.getAllBoards();
+        List<Board> boards = boardService.getAllBoards();
 
         //then
         assertThat(boards).hasSize(3)

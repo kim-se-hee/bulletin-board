@@ -1,8 +1,7 @@
 package ksh.bulletinboard.domain.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ksh.bulletinboard.domain.post.controller.dto.request.PostRegisterRequest;
-import ksh.bulletinboard.domain.post.service.PostService;
+import ksh.bulletinboard.domain.post.application.PostApplicationService;
 import ksh.bulletinboard.domain.post.service.dto.request.PostEditServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.request.PostPageServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
@@ -18,10 +17,9 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,14 +34,14 @@ class PostControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private PostService postService;
+    private PostApplicationService postApplicationService;
 
     @DisplayName("게시글을 조회한다")
     @Test
     void showPost() throws Exception {
         //given
         PostServiceResponse serviceResponse = new PostServiceResponse();
-        given(postService.getSinglePost(anyLong()))
+        given(postApplicationService.getSinglePost(anyLong()))
                 .willReturn(serviceResponse);
 
         //when //then
@@ -59,7 +57,7 @@ class PostControllerTest {
     void postsWithTitle() throws Exception {
         //given
         PostPageServiceResponse serviceResponse = new PostPageServiceResponse();
-        given(postService.getPostsOfBoard(anyLong(), any(PostPageServiceRequest.class)))
+        given(postApplicationService.getPostsOfBoard(anyLong(), any(PostPageServiceRequest.class)))
                 .willReturn(serviceResponse);
 
         //when //then
@@ -75,7 +73,7 @@ class PostControllerTest {
     void postsWithNickname() throws Exception {
         //given
         PostPageServiceResponse serviceResponse = new PostPageServiceResponse();
-        given(postService.getPostsOfBoard(anyLong(), any(PostPageServiceRequest.class)))
+        given(postApplicationService.getPostsOfBoard(anyLong(), any(PostPageServiceRequest.class)))
                 .willReturn(serviceResponse);
 
         //when //then
@@ -91,7 +89,7 @@ class PostControllerTest {
     void postsWithPaging() throws Exception {
         //given
         PostPageServiceResponse serviceResponse = new PostPageServiceResponse();
-        given(postService.getPostsOfBoard(anyLong(), any(PostPageServiceRequest.class)))
+        given(postApplicationService.getPostsOfBoard(anyLong(), any(PostPageServiceRequest.class)))
                 .willReturn(serviceResponse);
 
         //when //then
@@ -110,7 +108,7 @@ class PostControllerTest {
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("memberId", 1L);
 
-        given(postService.writePost(any()))
+        given(postApplicationService.createPost(any()))
                 .willReturn(new PostRegisterServiceResponse());
 
         //when //then
@@ -132,7 +130,7 @@ class PostControllerTest {
         session.setAttribute("memberId", 1L);
         PostEditServiceRequest request = new PostEditServiceRequest(1L, "title2", "content2");
 
-        given(postService.editPost(any()))
+        given(postApplicationService.editPost(any()))
                 .willReturn(new PostServiceResponse());
 
         //when //then

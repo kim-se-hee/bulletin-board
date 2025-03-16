@@ -9,13 +9,13 @@ import ksh.bulletinboard.domain.post.repository.PostRepository;
 import ksh.bulletinboard.domain.post.service.dto.request.PostEditServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.request.PostPageServiceRequest;
 import ksh.bulletinboard.domain.post.service.dto.request.PostRegisterServiceRequest;
-import ksh.bulletinboard.domain.post.service.dto.response.PostPageServiceResponse;
-import ksh.bulletinboard.domain.post.service.dto.response.PostRegisterServiceResponse;
-import ksh.bulletinboard.domain.post.service.dto.response.PostServiceResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -54,14 +54,16 @@ class PostServiceTest {
         PostPageServiceRequest request = new PostPageServiceRequest(null, null, 1, 2);
 
         //when
-        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), request);
+        Page<Post> response = postService.getPostsOfBoard(board.getId(), request);
 
         //then
-        assertThat(response)
-                .extracting("pageNum", "pageSize",  "totalPages", "hasNext")
-                .containsExactly(1, 2, 2, false);
+        assertThat(response.getNumber()).isEqualTo(1);
+        assertThat(response.getSize()).isEqualTo(2);
+        assertThat(response.getTotalPages()).isEqualTo(2);
+        assertThat(response.hasNext()).isFalse();
 
-        assertThat(response.getPostResponses()).hasSize(1)
+
+        assertThat(response.getContent()).hasSize(1)
                 .extracting("title", "views")
                 .containsExactly(tuple("글3", 1L));
 
@@ -82,10 +84,10 @@ class PostServiceTest {
         PostPageServiceRequest request = new PostPageServiceRequest(null, null, 3, 2);
 
         //when
-        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), request);
+        Page<Post> response = postService.getPostsOfBoard(board.getId(), request);
 
         //then
-        assertThat(response.getPostResponses()).isEmpty();
+        assertThat(response.getContent()).isEmpty();
 
     }
 
@@ -104,14 +106,15 @@ class PostServiceTest {
         PostPageServiceRequest request = new PostPageServiceRequest("5", null, 0, 2);
 
         //when
-        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), request);
+        Page<Post> response = postService.getPostsOfBoard(board.getId(), request);
 
         //then
-        assertThat(response)
-                .extracting("pageNum", "pageSize", "totalPages", "hasNext")
-                .containsExactly(0, 2, 1, false);
+        assertThat(response.getNumber()).isEqualTo(0);
+        assertThat(response.getSize()).isEqualTo(2);
+        assertThat(response.getTotalPages()).isEqualTo(1);
+        assertThat(response.hasNext()).isFalse();
 
-        assertThat(response.getPostResponses()).hasSize(1)
+        assertThat(response.getContent()).hasSize(1)
                 .extracting("title", "views")
                 .containsExactly(tuple("글456", 1L));
 
@@ -136,14 +139,16 @@ class PostServiceTest {
         PostPageServiceRequest request = new PostPageServiceRequest(null, "회원1", 0, 2);
 
         //when
-        PostPageServiceResponse response = postService.getPostsOfBoard(board.getId(), request);
+        Page<Post> response = postService.getPostsOfBoard(board.getId(), request);
 
         //then
-        assertThat(response)
-                .extracting("pageNum", "pageSize", "totalPages", "hasNext")
-                .containsExactly(0, 2, 1, false);
+        assertThat(response.getNumber()).isEqualTo(0);
+        assertThat(response.getSize()).isEqualTo(2);
+        assertThat(response.getTotalPages()).isEqualTo(1);
+        assertThat(response.hasNext()).isFalse();
 
-        assertThat(response.getPostResponses()).hasSize(2)
+
+        assertThat(response.getContent()).hasSize(2)
                 .extracting("title", "views")
                 .containsExactly(
                         tuple("글123", 1L),
@@ -166,7 +171,7 @@ class PostServiceTest {
         postRepository.save(post);
 
         //when
-        PostServiceResponse response = postService.getSinglePost(post.getId());
+        Post response = postService.getSinglePost(post.getId());
 
         //then
         assertThat(response)
@@ -204,45 +209,51 @@ class PostServiceTest {
         PostRegisterServiceRequest request = new PostRegisterServiceRequest("제목", "내용", List.of(), board.getId(), member.getId());
 
         //when
-        PostRegisterServiceResponse response = postService.writePost(request);
+        Post post = postService.writePost(request, board, member);
 
         //then
-        assertThat(response.getId()).isGreaterThan(0);
-        assertThat(response.getTitle()).isEqualTo("제목");
+        assertThat(post.getId()).isGreaterThan(0);
+        assertThat(post.getTitle()).isEqualTo("제목");
 
     }
 
-    @DisplayName("가입하지 않은 회원이 글을 쓰려하면 예외가 발생한다")
+    //TODO: 애플리케이션 서비스 테스트로 이동
+  /*@DisplayName("가입하지 않은 회원이 글을 쓰려하면 예외가 발생한다")
     @Test
     void writePost2(){
         //given
         Board board = createBoard();
         boardRepository.save(board);
 
+        Member member = createMember("member1");
+
         PostRegisterServiceRequest request = new PostRegisterServiceRequest("제목", "내용", List.of(), 1L, board.getId());
 
         //when //then
-        assertThatThrownBy(() -> postService.writePost(request))
+        assertThatThrownBy(() -> postService.writePost(request, board, member))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 사용자입니다");
 
-    }
+    }*/
 
-    @DisplayName("존재하지 않는 게시판에 글을 쓰려하면 예외가 발생한다")
+    //TODO: 애플리케이션 서비스 테스트로 이동
+    /*@DisplayName("존재하지 않는 게시판에 글을 쓰려하면 예외가 발생한다")
     @Test
     void writePost3(){
         //given
+        Board board = createBoard();
+
         Member member = createMember("member1");
         memberRepository.save(member);
 
         PostRegisterServiceRequest request = new PostRegisterServiceRequest("제목", "내용", List.of(), 1L, member.getId());
 
         //when //then
-        assertThatThrownBy(() -> postService.writePost(request))
+        assertThatThrownBy(() -> postService.writePost(request, board, member))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("존재하지 않는 게시판입니다");
 
-    }
+    }*/
 
     @DisplayName("글의 제목 또는 내용을 수정한다")
     @Test
@@ -262,7 +273,7 @@ class PostServiceTest {
         PostEditServiceRequest request = new PostEditServiceRequest(post.getId(), "title2", "content2");
 
         //when
-        PostServiceResponse response = postService.editPost(request);
+        Post response = postService.editPost(request);
 
         //then
         assertThat(response.getId()).isEqualTo(post.getId());
