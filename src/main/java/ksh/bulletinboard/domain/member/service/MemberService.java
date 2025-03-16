@@ -12,7 +12,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public MemberJoinResponse join(String nickname, String password) {
+    public Member join(String nickname, String password) {
         if(memberRepository.existsByNickname(nickname)) {
             throw new IllegalArgumentException("사용할 수 없는 아이디입니다");
         }
@@ -21,15 +21,18 @@ public class MemberService {
                 .nickname(nickname)
                 .password(password)
                 .build();
-        memberRepository.save(member);
-
-        return MemberJoinResponse.from(member);
+        return memberRepository.save(member);
     }
 
     public long getLoginMemberId(String nickname, String password) {
         return memberRepository.findByNicknameAndPassword(nickname, password)
                 .map(Member::getId)
                 .orElseThrow(() -> new IllegalArgumentException("회원 정보가 일치하지 않습니다"));
+    }
+
+    public Member getById(long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다"));
     }
 
 }

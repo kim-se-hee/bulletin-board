@@ -1,6 +1,7 @@
 package ksh.bulletinboard.domain.member.controller;
 
 import jakarta.validation.Valid;
+import ksh.bulletinboard.domain.member.application.MemberApplicationService;
 import ksh.bulletinboard.domain.member.controller.dto.request.MemberJoinRequest;
 import ksh.bulletinboard.domain.member.service.MemberService;
 import ksh.bulletinboard.domain.member.service.dto.response.MemberJoinResponse;
@@ -15,11 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberService memberService;
+    private final MemberApplicationService memberApplicationService;
 
     @PostMapping("/members/new")
     public ResponseEntity<MemberJoinResponse> member(@Valid @RequestBody MemberJoinRequest request) {
-        MemberJoinResponse response = memberService.join(request.getNickname(), request.getPassword());
+        MemberJoinResponse response = memberApplicationService.join(request.getNickname(), request.getPassword());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
